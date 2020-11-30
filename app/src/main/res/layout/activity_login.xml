@@ -1,80 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login"
+    android:background="@color/purple_200"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:textAlignment="center"
+    tools:context=".Login">
 
     <ImageView
         android:id="@+id/logoimg"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="top|right"
-        android:src="@drawable/splach_screen_icon"/>
+        android:layout_width="364dp"
+        android:layout_height="344dp"
+        android:src="@drawable/splach_screen_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/welcometxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:fontFamily="@font/aclonica"
+        android:text="Welcome to smart Grocery List"
+        android:autoSizeTextType="uniform"
         android:lineSpacingExtra="10sp"
-        android:text="Hello\nPlease enter your Email and Password to continue"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-    //username password layout
-    <LinearLayout
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/logoimg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/login"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:orientation="vertical">
-        //username
-        <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/userid"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginBottom="20dp"
-            android:hint="Email">
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
-        //password
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/password"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:passwordToggleEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_marginBottom="20dp"
-                android:hint="Password"
-                android:inputType="textPassword">
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Log In"
-            />
-        <Button
-            android:id="@+id/register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#00000000"
-            android:elevation="0dp"
-            android:text="Don't have an account yet ? Sign Up"
-            android:textColor="@color/black"/>
-    </LinearLayout>
+        android:layout_height="70dp"
+        android:elevation="@dimen/cardview_compat_inset_shadow"
+        android:text="Sign-in By google"
+        app:backgroundTint="#FFD500"
+        app:iconTint="#AA9D9D"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoimg"
+        tools:layout_editor_absoluteX="-11dp" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
