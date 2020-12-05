@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Dashbord"
     android:paddingBottom="1dp"
     >
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
     <include layout="@layout/toolbar"
         android:id="@+id/home_tool_bar">
     </include>
@@ -22,7 +23,7 @@
             android:textAlignment="viewStart"
             android:textColor="#000000"
             android:background="#23468A61"
-            android:textSize="15dp"
+            android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@+id/mail"
             app:layout_constraintStart_toStartOf="@+id/mail" />
 
@@ -33,4 +34,15 @@
 
 
         </androidx.recyclerview.widget.RecyclerView>
-</androidx.appcompat.widget.LinearLayoutCompat>
+</LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_keyboard_voice_24"
+        android:layout_gravity="end|bottom"
+        android:id="@+id/voice_btn"
+        android:layout_margin="20dp"
+        >
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

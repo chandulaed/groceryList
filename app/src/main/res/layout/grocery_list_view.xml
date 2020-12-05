@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    app:cardElevation="6dp"
+    android:elevation="6dp"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:id="@+id/list_name"
+            android:padding="5dp"
+            android:textColor="#23211C"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            />
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_weight="1"
+    android:layout_height="0dp"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cost"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:id="@+id/list_cost"
+        android:padding="5dp"
+        android:textAlignment="viewEnd"
+        android:textColor="#23211C"
+        />
+</RelativeLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
