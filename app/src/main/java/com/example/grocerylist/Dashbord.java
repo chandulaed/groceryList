@@ -14,12 +14,14 @@ import android.widget.Toolbar;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Dashbord extends AppCompatActivity {
 
     TextView mail;
     androidx.appcompat.widget.Toolbar toolbar;
+    private FloatingActionButton voiceRecognition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +29,21 @@ public class Dashbord extends AppCompatActivity {
         setContentView(R.layout.activity_dashbord);
         mail = findViewById(R.id.mail);
         toolbar = findViewById(R.id.home_tool_bar);
+        voiceRecognition = findViewById(R.id.voice_btn);
         setSupportActionBar(toolbar);
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         if (signInAccount != null) {
             getSupportActionBar().setTitle("HELLO " + signInAccount.getGivenName());
             mail.setText("UserID -- " + signInAccount.getEmail());
         }
+        voiceRecognition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent v_intent = new Intent(getApplicationContext(), Speech_text.class);
+                startActivity(v_intent);
+            }
+        });
+
     }
 
     @Override

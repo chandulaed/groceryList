@@ -3,6 +3,7 @@
     package="com.example.grocerylist">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Grocerylist">
-        <activity android:name=".Dashbord"></activity>
+        <activity android:name=".Speech_text"></activity>
+        <activity android:name=".Dashbord" />
         <activity android:name=".Register" />
         <activity android:name=".Login" />
         <activity android:name=".MainActivity">
