@@ -231,6 +231,7 @@ public class Speech_text extends AppCompatActivity {
                         newItem.setItemLoc(result.get(0));
                         Speak("do you need to add" + newItem.getItemQty() + newItem.getItemName() + "from" + newItem.getItemLoc() + "to list" + newItem.getlistname());
                     }else{
+                        newItem.setItemLoc("no");
                         Speak("do you need to add" + newItem.getItemQty() + newItem.getItemName() + "to list" + newItem.getlistname());
                     }
                     handler.postDelayed(new Runnable() {
@@ -244,6 +245,38 @@ public class Speech_text extends AppCompatActivity {
 
                 case 6:{
                     SpeechTranscript.append(result.get(0));
+                    Tokenizer listCreateConfirm = new Tokenizer(result.get(0));
+                    if (listCreateConfirm.getCommand().equals("yes")||listCreateConfirm.getCommand().equals("ok")) {
+                        SpeechTranscript.append("confirming........\n\n");
+                        newItem.additem(getApplicationContext());
+                        Speak("Item Successfully added");
+                        newList=null;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        },4000);
+                    }
+                    else
+                    if (listCreateConfirm.getCommand().equals("no")||listCreateConfirm.getCommand().equals("cancel")){
+                        Speak("Cancelling add item\n Thank You");
+                        newList=null;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        },4000);
+                    }
+                    else {
+                        Speak("Sorry Cannot Recognize the command\n Please Try again ");
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                Ask("confirm the create item", 6);
+                            }
+                        }, 3500);
+                    }
 
                 }
 

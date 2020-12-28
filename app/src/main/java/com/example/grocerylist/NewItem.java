@@ -1,5 +1,8 @@
 package com.example.grocerylist;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -86,6 +89,19 @@ public class NewItem {
     public void setItemLoc(String Loc) {
         itemStruct.setItemLocation(Loc);
     }
+
+    public void additem(Context context){
+        try {
+            FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference reffitemCreate = mDatabase.getInstance().getReference();
+
+            reffitemCreate.child("List").child(listID).child("Items").child(itemStruct.getItemName()).setValue(itemStruct);
+        }
+        catch (Exception e){
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }
 
