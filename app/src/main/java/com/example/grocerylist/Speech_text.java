@@ -13,6 +13,8 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -27,7 +29,8 @@ public class Speech_text extends AppCompatActivity {
     private boolean ttsIsInitialized;
     Handler handler = new Handler();
     NewItem newItem;
-    int complte;
+    EditItem editItem;
+
 
 
     @Override
@@ -42,7 +45,7 @@ public class Speech_text extends AppCompatActivity {
 
 
     private void start(){
-        Speak("hello What do you want to do");
+        Speak("Hello!..What do you want ?");
         handler.postDelayed(new Runnable() {
             public void run() {
                 Ask("What do you want to do", 1);
@@ -93,7 +96,6 @@ public class Speech_text extends AppCompatActivity {
             switch (requestCode) {
             //first command
                 case 1: {
-
                     Tokenizer commandOne = new Tokenizer(result.get(0));
                     if (commandOne.getCommand().equals("create") || commandOne.getCommand().equals("Create")) {
                         newList = new NewList(commandOne.getObject());
@@ -103,7 +105,7 @@ public class Speech_text extends AppCompatActivity {
                             public void run() {
                                 int avail = newList.getisListavailable();
                                 if (!(avail == 5)) {
-                                    transtript = "Do you want to create a list named " + newList.getListName();
+                                    transtript = "Do you want to create a list named," + newList.getListName();
                                     Speak(transtript);
                                     handler.postDelayed(new Runnable() {
                                         public void run() {
@@ -123,10 +125,9 @@ public class Speech_text extends AppCompatActivity {
                         }, 5000);
                         //Toast.makeText(Speech_text.this, String.valueOf(avail), Toast.LENGTH_SHORT).show();
 
-
                     } else if (commandOne.getCommand().equals("add") || commandOne.getCommand().equals("Add")) {
                         newItem = new NewItem(commandOne.getObject());
-                        Speak("What the list you need to add" + commandOne.getObject());
+                        Speak("What is the list you need to add," + commandOne.getObject());
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -134,13 +135,32 @@ public class Speech_text extends AppCompatActivity {
                             }
                         }, 2500);
 
+                    }else if(commandOne.getCommand().equals("edit") || commandOne.getCommand().equals("Edit")){
+                        editItem = new EditItem(commandOne.getObject());
+                        Speak("What is the list you need edit, " + editItem.getItemName());
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Ask("What the list you need to edit", 7);
+                            }
+                        }, 2500);
+
+                    }else if(commandOne.getCommand().equals("cancel") || commandOne.getCommand().equals("close")){
+                        cancel();
+                    }else{
+                        Speak("Cannot recognize the command, try again");
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Ask("Cannot recognize the command, try again", 1);
+                            }
+                        }, 2500);
                     }
                     break;
                 }
 
 
                 case 2: {
-
                     SpeechTranscript.append(result.get(0) + "\n\n");
                     Tokenizer listCreateConfirm = new Tokenizer(result.get(0));
                     if (listCreateConfirm.getCommand().equals("yes")||listCreateConfirm.getCommand().equals("ok")) {
@@ -169,7 +189,7 @@ public class Speech_text extends AppCompatActivity {
                             },4000);
                         }
                         else {
-                            Speak("Sorry Cannot Recognize the command\n Please Try again ");
+                            Speak("Sorry, Cannot Recognize the command..., Please Try again ");
                             handler.postDelayed(new Runnable() {
                                 public void run() {
                                     Ask("confirm the create", 2);
@@ -180,7 +200,6 @@ public class Speech_text extends AppCompatActivity {
                 }
 
                 case 3: {
-
                     SpeechTranscript.append(result.get(0) + "\n\n");
                     Tokenizer commandlist = new Tokenizer(result.get(0));
                     newItem.searchList(commandlist.getObject());
@@ -188,8 +207,8 @@ public class Speech_text extends AppCompatActivity {
                         @Override
                         public void run() {
                         if (newItem.getListavailable() == 5) {
-                            SpeechTranscript.append("List Found - listid ---" + newItem.getListID());
-                            Speak("How much you need to add");
+                            SpeechTranscript.append("List Found - listid ---" + newItem.getListID() +"\n\n");
+                            Speak("How much you need to add ?");
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -197,7 +216,7 @@ public class Speech_text extends AppCompatActivity {
                                 }
                             }, 3000);
                         } else {
-                            Speak("Sorry list cannot be find please try again");
+                            Speak("Sorry list cannot be found please try again");
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -277,20 +296,132 @@ public class Speech_text extends AppCompatActivity {
                             }
                         }, 3500);
                     }
+                    break;
+                }
+
+                case 7:{
+                    SpeechTranscript.append(result.get(0) + "\n\n");
+                    Tokenizer commandlist = new Tokenizer(result.get(0));
+                    editItem.searchList(commandlist.getObject());
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (editItem.getListavailable() == 5) {
+                                SpeechTranscript.append("List Found - listid --- " + editItem.getListID()+"\n\n");
+                                editItem.searchitem(getApplicationContext());
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (editItem.getItemavailable()==5){
+                                            SpeechTranscript.append("Item Found - ItemKey ---" +editItem.getItemkey() +"\n\n");
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Speak("What you need to edit ?");
+                                                    Ask("What you need to edit ?",8);
+                                                }
+                                            }, 2000);
+                                        } else {
+                                            Speak("Sorry item cannot be find please try again");
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Ask("Sorry item cannot be found please add the item", 1);
+                                                }
+                                            }, 2000);
+                                        }
+                                    }
+                                }, 5000);
+                            } else {
+                                Speak("Sorry list cannot be find please try again");
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Ask("Sorry list cannot be find please try again", 7);
+                                    }
+                                }, 2000);
+                            }
+                        }
+                    }, 5000);
+                    break;
+                }
+                case 8: {
+                    SpeechTranscript.append(result.get(0) + "\n\n");
+                    Tokenizer commandlist = new Tokenizer(result.get(0));
+                    if(commandlist.getObject().equals("name")||commandlist.getObject().equals("Name")){
+                        Speak("Please say the new Name");
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Ask("Please say a name", 9);
+                            }
+                        }, 2000);
+                    }else if(commandlist.getObject().equals("Quantity")||commandlist.getObject().equals("quantity")){
+                        Speak("Please say the new Quantity");
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Ask("Please say a Quantity", 1);
+                            }
+                        }, 2000);
+                    }else if(commandlist.getObject().equals("Location")||commandlist.getObject().equals("location")){
+                        Speak("Please say the new Location");
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Ask("Please say a Location", 1);
+                            }
+                        }, 2000);
+                    }else {
+                        Speak("Sorry cannot recognize the command please try again");
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Ask("Sorry cannot recognize the command please try again", 8);
+                            }
+                        }, 2000);
+                    }
+                    break;
+                }
+
+                case 9:{
+                    SpeechTranscript.append(result.get(0) + "\n\n");
+                    editItem.setNewvalue(result.get(0));
+                    Speak("do you need edit name of the item" + editItem.getItemName() + "to"+editItem.getNewvalue() + "in" + editItem.getListname());
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Ask("confirm ", 10);
+                        }
+                    }, 2000);
+                    break;
 
                 }
 
+                case 10:{
+                    SpeechTranscript.append(result.get(0) + "\n\n");
+                    if(result.get(0).equals("yes")||result.get(0).equals("sure")||result.get(0).equals("conform")){
+                        editItem.editname();
+                    }
+                    break;
+                }
 
             }
-
 
         }
 
 
     }
 
-
-
+    private void cancel(){
+        Speak("Thank you, cancelling the process");
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 2500);
+    }
 
 
 

@@ -5,12 +5,16 @@ public class ItemStruct {
     private String itemQty;
     private String itemLocation;
     private String cost;
-    private boolean collected;
+    private String collected;
 
 
+    public ItemStruct() {
+    }
 
     public ItemStruct(String name) {
         this.itemName=name;
+        this.collected= "false";
+        this.cost="0";
     }
 
     public String getItemName() {
@@ -45,11 +49,11 @@ public class ItemStruct {
         this.cost = cost;
     }
 
-    public boolean isCollected() {
+    public String isCollected() {
         return collected;
     }
 
-    public void setCollected(boolean collected) {
+    public void setCollected(String collected) {
         this.collected = collected;
     }
 }

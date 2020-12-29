@@ -22,6 +22,8 @@ public class NewItem {
     private ItemStruct itemStruct;
     private String listname;
 
+
+
     public int getListavailable() {
         return listavailable;
     }
@@ -29,7 +31,6 @@ public class NewItem {
     public String getlistname(){
         return listname;
     }
-
 
 
     public String getListID() {
@@ -93,9 +94,8 @@ public class NewItem {
     public void additem(Context context){
         try {
             FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-            DatabaseReference reffitemCreate = mDatabase.getInstance().getReference();
-
-            reffitemCreate.child("List").child(listID).child("Items").child(itemStruct.getItemName()).setValue(itemStruct);
+            DatabaseReference reffitemCreate = mDatabase.getInstance().getReference().child("List").child(listID).child("Items");
+            reffitemCreate.push().setValue(itemStruct);
         }
         catch (Exception e){
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
