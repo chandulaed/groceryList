@@ -67,7 +67,6 @@ public class NewList extends Thread {
         }
     }
 
-
     public void isListAvailable() {
         listavailable = 1;
         DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("User").child(UserID);
@@ -79,7 +78,6 @@ public class NewList extends Thread {
                     templist = snapshot1.getValue(ListStruct.class);
                     if(templist.getListName().equals(listStruct.getListName())){
                         userref.removeEventListener(this);
-
                         listavailable =5;
                         return;
                     };
@@ -92,13 +90,6 @@ public class NewList extends Thread {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-
         return;
     }
-
-
-
-
-
-
 }

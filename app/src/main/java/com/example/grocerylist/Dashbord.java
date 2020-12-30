@@ -2,7 +2,9 @@ package com.example.grocerylist;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -39,8 +42,12 @@ public class Dashbord extends AppCompatActivity {
         voiceRecognition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(isNetworkConnected()==true){
                 Intent v_intent = new Intent(getApplicationContext(), Speech_text.class);
-                startActivity(v_intent);
+                startActivity(v_intent);}
+                else{
+                    Toast.makeText(Dashbord.this, "No Internet Connection Please Try again", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -69,5 +76,10 @@ public class Dashbord extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

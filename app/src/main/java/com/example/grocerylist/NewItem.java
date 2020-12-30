@@ -16,9 +16,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class NewItem {
-    private int listavailable = 1;
+    private int listavailable = 0, itemavailable=0;
     private FirebaseUser user;
-    private String listID;
+    private String listID,itemkey;
     private ItemStruct itemStruct;
     private String listname;
 
@@ -102,7 +102,38 @@ public class NewItem {
         }
     }
 
+    public void searchitem(){
+        itemavailable =1;
+        DatabaseReference itemref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("Items");
+        itemref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                    if (snapshot1.child("itemName").getValue().equals(itemStruct.getItemName())) {
+                        itemkey=snapshot1.getKey();
+                        itemref.removeEventListener(this);
+                        itemavailable = 5;
+                        return;
+                    }
+                }
+                itemref.removeEventListener(this);
+                return;
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        return;
+    }
+
+    public int getItemavailable() {
+        return itemavailable;
+    }
+
+    public String getItemkey() {
+        return itemkey;
+    }
 }
 
 

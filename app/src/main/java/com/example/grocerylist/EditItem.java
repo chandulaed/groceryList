@@ -15,7 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class EditItem {
     private String itemName,listID,newvalue,listname,itemkey;
-    private int listavailable=1,itemavailable=1;
+    private int listavailable=0,itemavailable=0;
     private FirebaseUser user;
 
     public String getListname() {
@@ -88,15 +88,13 @@ public class EditItem {
         return;
     }
 
-    public void searchitem(Context con){
+    public void searchitem(){
         itemavailable =1;
         DatabaseReference itemref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("Items");
-        Toast.makeText(con,itemref.getKey(), Toast.LENGTH_SHORT).show();
         itemref.addValueEventListener(new ValueEventListener() {
           @Override
           public void onDataChange(@NonNull DataSnapshot snapshot) {
               for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                  // Toast.makeText(con, (String) snapshot1.child("item").child("itemName").getValue(), Toast.LENGTH_SHORT).show();
                   if (snapshot1.child("itemName").getValue().equals(itemName)) {
                       itemkey=snapshot1.getKey();
                       itemref.removeEventListener(this);
