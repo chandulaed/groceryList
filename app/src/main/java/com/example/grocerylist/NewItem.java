@@ -15,16 +15,24 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+
 public class NewItem {
-    private int listavailable = 0, itemavailable=0;
+    private boolean listavailable=false;
+    private boolean taskCompleted=false;
+    private boolean NoSnapshot = false;
+    private boolean itemavailable = false;
     private FirebaseUser user;
-    private String listID,itemkey;
+    private String listID, CurrentItemID,CurrentItemName,CurrentItemQuantity,CurrentItemLoc;
     private ItemStruct itemStruct;
     private String listname;
+    private ArrayList <AddItemSearchList> listarray = new ArrayList<>();
 
 
+    public ArrayList<AddItemSearchList> getlistarray() {
+        return listarray;
+    }
 
-    public int getListavailable() {
+    public boolean getListavailable() {
         return listavailable;
     }
 
@@ -37,37 +45,59 @@ public class NewItem {
         return listID;
     }
 
-    public NewItem(String name) {
-        itemStruct=new ItemStruct(name);
+    public NewItem() {
         user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    public void searchList(String Listname) {
-        this.listname =Listname;
-        listavailable = 1;
+    public void setItemName(String name){
+        itemStruct=new ItemStruct(name);
+    }
+
+    public void searchList(String listName,Context context) {
+        itemavailable = false;
+        taskCompleted=false;
+        NoSnapshot=true;
+        this.listname =listName;
         DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid());
         userref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ListStruct templist;
-                for(DataSnapshot snapshot1:snapshot.getChildren()){
-                    templist = snapshot1.getValue(ListStruct.class);
-                    if(templist.getListName().equals(Listname)){
-                        listID=snapshot1.getKey();
-                        userref.removeEventListener(this);
-                        listavailable =5;
-                        return;
-                    };
+                if(!snapshot.exists()){
+                    taskCompleted=true;
+                    NoSnapshot=true;
+                    userref.removeEventListener(this);
+                    return;
+                }else {
+                    ListStruct templist=null;
+                    listarray.clear();
+                    int i=0;
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        templist = snapshot1.getValue(ListStruct.class);
+                        if (templist.getListName().equals(getlistname())) {
+                            AddItemSearchList tempsearch =new AddItemSearchList();
+                            tempsearch.setName(templist.getListName());
+                            tempsearch.setDate(templist.getDateCreated());
+                            tempsearch.setKey(templist.getListID());
+                            listarray.add(tempsearch);
+                            Toast.makeText(context, String.valueOf(listarray.get(i).getDate()), Toast.LENGTH_SHORT).show();
+                            i++;
+                       }
+
+                    }
+
+                    Toast.makeText(context, "Current list was successfully analysed", Toast.LENGTH_SHORT).show();
+                    userref.removeEventListener(this);
+                    NoSnapshot=false;
+                    taskCompleted=true;
+                    return;
                 }
-                userref.removeEventListener(this);
-                return;
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-
         return;
+
     }
 
 
@@ -77,6 +107,18 @@ public class NewItem {
 
     public String getItemQty() {
         return itemStruct.getItemQty();
+    }
+
+    public void setListID(String listID) {
+        this.listID = listID;
+    }
+
+    public String getListname() {
+        return listname;
+    }
+
+    public void setListname(String listname) {
+        this.listname = listname;
     }
 
     public String getItemLoc() {
@@ -102,22 +144,42 @@ public class NewItem {
         }
     }
 
-    public void searchitem(){
-        itemavailable =1;
+    public void searchitem(Context context){
+        itemavailable = false;
+        taskCompleted=false;
+        NoSnapshot=true;
         DatabaseReference itemref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("Items");
         itemref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                    if (snapshot1.child("itemName").getValue().equals(itemStruct.getItemName())) {
-                        itemkey=snapshot1.getKey();
-                        itemref.removeEventListener(this);
-                        itemavailable = 5;
-                        return;
+                if(snapshot.exists()!=true){
+                    itemavailable= false;
+                    taskCompleted=true;
+                    NoSnapshot=true;
+                    itemref.removeEventListener(this);
+                    return;
+                }else {
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        if (snapshot1.child("itemName").getValue().equals(itemStruct.getItemName()))  {
+                            CurrentItemName=String.valueOf(snapshot1.child("itemName").getValue());
+                            CurrentItemQuantity=String.valueOf(snapshot1.child("itemQty").getValue());
+                            CurrentItemLoc=String.valueOf(snapshot1.child("itemLocation").getValue());
+                            CurrentItemID=String.valueOf(snapshot1.getKey());
+                            itemref.removeEventListener(this);
+                            Toast.makeText(context, "List analyzed completed", Toast.LENGTH_SHORT).show();
+                            itemavailable = true;
+                            taskCompleted=true;
+                            NoSnapshot=false;
+                            return;
+                        }
                     }
+                    Toast.makeText(context, "List analyzed completed", Toast.LENGTH_SHORT).show();
+                    itemref.removeEventListener(this);
+                    itemavailable = false;
+                    taskCompleted=true;
+                    NoSnapshot=false;
+                    return;
                 }
-                itemref.removeEventListener(this);
-                return;
             }
 
             @Override
@@ -127,12 +189,48 @@ public class NewItem {
         return;
     }
 
-    public int getItemavailable() {
+    public boolean isListavailable() {
+        return listavailable;
+    }
+
+    public boolean isTaskCompleted() {
+        return taskCompleted;
+    }
+
+    public boolean isItemavailable() {
         return itemavailable;
     }
 
-    public String getItemkey() {
-        return itemkey;
+    public String getCurrentItemID() {
+        return CurrentItemID;
+    }
+
+    public void setCurrentItemID(String currentItemID) {
+        CurrentItemID = currentItemID;
+    }
+
+    public String getCurrentItemName() {
+        return CurrentItemName;
+    }
+
+    public void setCurrentItemName(String currentItemName) {
+        CurrentItemName = currentItemName;
+    }
+
+    public String getCurrentItemQuantity() {
+        return CurrentItemQuantity;
+    }
+
+    public void setCurrentItemQuantity(String currentItemQuantity) {
+        CurrentItemQuantity = currentItemQuantity;
+    }
+
+    public String getCurrentItemLoc() {
+        return CurrentItemLoc;
+    }
+
+    public void setCurrentItemLoc(String currentItemLoc) {
+        CurrentItemLoc = currentItemLoc;
     }
 }
 

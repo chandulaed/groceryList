@@ -13,20 +13,34 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 
-
-public class NewList extends Thread {
+public class NewList {
     private ListStruct listStruct = new ListStruct();
 
     private String UserID;
-    private int listavailable=0;
+    private boolean listavailable=false;
+    private boolean taskCompleted=false;
+    private boolean NoSnapshot = false;
+    private String lastListName =null;
+    private String newlistname;
 
-    public NewList() {
-
+    public boolean isNoSnapshot() {
+        return NoSnapshot;
     }
 
-    public int getisListavailable() {
+    public String getNewlistname() {
+        return newlistname;
+    }
+
+    public void setNewlistname(String newlistname) {
+        this.newlistname = newlistname;
+    }
+
+    public NewList() {
+        setUserID();
+    }
+
+    public boolean getisListavailable() {
         return this.listavailable;
     }
 
@@ -35,21 +49,23 @@ public class NewList extends Thread {
         this.UserID = user.getUid();
     }
 
-    public NewList(String name) {
-        setUserID();
+    public void setListname(String name){
         this.listStruct.setListName(name);
-        isListAvailable();
     }
+
+
 
     public String getListName() {
         return listStruct.getListName();
     }
 
     public void setListID(String timestamp){
-        this.listStruct.setListID(timestamp +this.listStruct.getListName());
+        this.listStruct.setListID(timestamp +"_"+this.listStruct.getListName());
     }
 
-
+    public void setdate(String date){
+        listStruct.setDateCreated(date);
+    }
 
     public void addList(Context context){
         try {
@@ -67,29 +83,43 @@ public class NewList extends Thread {
         }
     }
 
-    public void isListAvailable() {
-        listavailable = 1;
+
+    public void searchLastList() {
+        taskCompleted = false;
+        NoSnapshot=true;
         DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("User").child(UserID);
         userref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ListStruct templist;
-                for(DataSnapshot snapshot1:snapshot.getChildren()){
-                    templist = snapshot1.getValue(ListStruct.class);
-                    if(templist.getListName().equals(listStruct.getListName())){
-                        userref.removeEventListener(this);
-                        listavailable =5;
-                        return;
-                    };
-                }
-                userref.removeEventListener(this);
+                if (snapshot.exists() != true) {
+                    NoSnapshot=true;
+                    taskCompleted = true;
+                    userref.removeEventListener(this);
+                    return;
+                } else {
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        lastListName = snapshot1.getValue(ListStruct.class).getListName();
+                        NoSnapshot=false;
+                    }
+                    userref.removeEventListener(this);
+                    taskCompleted = true;
 
-                return;
+                    return;
+                }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-        return;
+
+    }
+
+    public boolean isTaskCompleted() {
+        return taskCompleted;
+    }
+
+    public String getlastListName() {
+        return lastListName;
     }
 }

@@ -1,22 +1,13 @@
 package com.example.grocerylist;
-import android.app.usage.NetworkStats;
 import android.content.Context;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
-import com.google.api.client.util.Lists;
-import com.google.api.gax.core.CredentialsProvider;
-import com.google.api.gax.core.FixedCredentialsProvider;
-import com.google.api.gax.paging.Page;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.language.v1.AnalyzeSentimentResponse;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -46,6 +37,7 @@ public class Tokenizer {
     }
 
     public int Sentiment(Context context) {
+
         try (LanguageServiceClient language = LanguageServiceClient.create()) {
             Document doc = Document.newBuilder().setContent(voice).setType(Document.Type.PLAIN_TEXT).build();
             AnalyzeSentimentResponse response = language.analyzeSentiment(doc);
@@ -66,4 +58,34 @@ public class Tokenizer {
         }
         return 0;
     }
+
+    public  int classifier(){
+        String[] create ={"create","build","conceive","constitute","construct","design","devise","discover","establish","forge","form","found","generate","initiate","invent","make","organize"," plan"," produce","set up","shape","spawn","start"};
+        String[] edit = {"edit","alter", "make different", "become different", "undergo a change","adjust"," adapt", "turn","amend", "improve"," modify", "convert", "revise", "recast", "reform", "reshape", "refashion", "redesign", "restyle", "revamp", "rework", "remake", "remodel", "remould", "redo", "reconstruct", "reorganize", "reorder", "refine", "reorient", "reorientate", "transform", "transfigure", "evolve"};
+        String[] delete = {"remove", "cut", "excise", "unpublish","wipe","delete","destroy","Delete"};
+        String[] add = {"attach", "put", "append", "adjoin", "join", "affix", "insert","place","push", "load", "fit","add","insert"};
+
+        for (String word: create){
+            if(this.command.equals(word)){
+                return 1;
+            }
+        }
+        for (String word: edit){
+            if(this.command.equals(word)){
+                return 2;
+            }
+        }
+        for (String word: delete){
+            if(this.command.equals(word)){
+                return 3;
+            }
+        }
+        for (String word: add){
+            if(this.command.equals(word)){
+                return 4;
+            }
+        }
+        return 0;
+    }
+
 }

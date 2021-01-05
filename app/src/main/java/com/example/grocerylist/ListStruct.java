@@ -3,6 +3,7 @@ package com.example.grocerylist;
 public class ListStruct {
     private String ListName;
     private  String ListID;
+    private String dateCreated;
 
     public String getListName() {
         return ListName;
@@ -21,5 +22,13 @@ public class ListStruct {
     }
 
     public ListStruct() {
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

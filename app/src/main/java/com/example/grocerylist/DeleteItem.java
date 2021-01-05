@@ -15,95 +15,34 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class EditItem {
-    private String itemName,listID,newvalue,listname,itemkey;
-    private FirebaseUser user;
+public class DeleteItem {
+    private String listname,listID,ItemID,ItemName;
+    FirebaseUser user;
     private boolean listavailable=false;
     private boolean taskCompleted=false;
     private boolean NoSnapshot = false;
     private boolean itemavailable = false;
     private ArrayList<AddItemSearchList> listarray = new ArrayList<>();
 
-    public String getListname() {
-        return listname;
-    }
 
-    public String getNewvalue() {
-        return newvalue;
-    }
 
-    public void setNewvalue(String newvalue) {
-        this.newvalue = newvalue;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public boolean getItemavailable() {
-        return itemavailable;
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public boolean getListavailable() {
-        return listavailable;
-    }
-
-    public boolean isListavailable() {
-        return listavailable;
-    }
-
-    public boolean isTaskCompleted() {
-        return taskCompleted;
-    }
-
-    public boolean isNoSnapshot() {
-        return NoSnapshot;
-    }
-
-    public boolean isItemavailable() {
-        return itemavailable;
-    }
-
-    public ArrayList<AddItemSearchList> getListarray() {
-        return listarray;
-    }
-
-    public FirebaseUser getUser() {
-        return user;
-    }
-
-    public String getListID() {
-        return listID;
-    }
-
-    public EditItem(String itemName) {
-        this.itemName = itemName;
+    public DeleteItem() {
         user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    public void setListID(String listID) {
-        this.listID = listID;
+    public void Itemdelete(Context context){
+        try {
+            FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference reffitemCreate = mDatabase.getInstance().getReference();
+            reffitemCreate.child("List").child(listID).child("Items").child(ItemID).setValue(null);
+        }
+        catch (Exception e){
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
-    public void setListname(String listname) {
-        this.listname = listname;
-    }
 
-    public void setItemkey(String itemkey) {
-        this.itemkey = itemkey;
-    }
-
-
-
-    public void setUser(FirebaseUser user) {
-        this.user = user;
-    }
-
-    public void searchList(Context context) {
+    public void searchList( Context context) {
         itemavailable = false;
         taskCompleted=false;
         NoSnapshot=true;
@@ -119,7 +58,6 @@ public class EditItem {
                 }else {
                     ListStruct templist;
                     listarray.clear();
-
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         templist = snapshot1.getValue(ListStruct.class);
                         if (templist.getListName().equals(getListname())) {
@@ -142,6 +80,7 @@ public class EditItem {
             }
         });
         return;
+
     }
 
     public void searchitem(Context context){
@@ -161,7 +100,7 @@ public class EditItem {
                 }else {
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         if (snapshot1.child("itemName").getValue().equals(getItemName()))  {
-                            itemkey=String.valueOf(snapshot1.getKey());
+                            ItemID=String.valueOf(snapshot1.getKey());
                             itemref.removeEventListener(this);
                             Toast.makeText(context, "List analyzed completed", Toast.LENGTH_SHORT).show();
                             itemavailable = true;
@@ -186,24 +125,77 @@ public class EditItem {
         return;
     }
 
-    public void editname(){
-        DatabaseReference editnameref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("Items").child(itemkey);
-        editnameref.child("itemName").setValue(newvalue);
-    }
-    public void editLoc(){
-        DatabaseReference editnameref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("Items").child(itemkey);
-        editnameref.child("itemLocation").setValue(newvalue);
-    }
-    public void editQty(){
-        DatabaseReference editnameref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("Items").child(itemkey);
-        editnameref.child("itemQty").setValue(newvalue);
+
+
+    public String getListname() {
+        return listname;
     }
 
-    public String getItemkey() {
-        return itemkey;
+    public void setListname(String listname) {
+        this.listname = listname;
     }
 
-    public EditItem() {
-        user = FirebaseAuth.getInstance().getCurrentUser();
+    public String getListID() {
+        return listID;
+    }
+
+    public void setListID(String listID) {
+        this.listID = listID;
+    }
+
+    public String getItemID() {
+        return ItemID;
+    }
+
+    public void setItemID(String itemID) {
+        ItemID = itemID;
+    }
+
+    public String getItemName() {
+        return ItemName;
+    }
+
+    public void setItemName(String itemName) {
+        ItemName = itemName;
+    }
+
+    public boolean isListavailable() {
+        return listavailable;
+    }
+
+    public void setListavailable(boolean listavailable) {
+        this.listavailable = listavailable;
+    }
+
+    public boolean isTaskCompleted() {
+        return taskCompleted;
+    }
+
+    public void setTaskCompleted(boolean taskCompleted) {
+        this.taskCompleted = taskCompleted;
+    }
+
+    public boolean isNoSnapshot() {
+        return NoSnapshot;
+    }
+
+    public void setNoSnapshot(boolean noSnapshot) {
+        NoSnapshot = noSnapshot;
+    }
+
+    public boolean isItemavailable() {
+        return itemavailable;
+    }
+
+    public void setItemavailable(boolean itemavailable) {
+        this.itemavailable = itemavailable;
+    }
+
+    public ArrayList<AddItemSearchList> getListarray() {
+        return listarray;
+    }
+
+    public void setListarray(ArrayList<AddItemSearchList> listarray) {
+        this.listarray = listarray;
     }
 }
