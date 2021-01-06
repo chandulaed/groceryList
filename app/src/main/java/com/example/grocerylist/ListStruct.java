@@ -31,4 +31,10 @@ public class ListStruct {
     public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
     }
+
+    public ListStruct(String listName, String listID, String dateCreated) {
+        ListName = listName;
+        ListID = listID;
+        this.dateCreated = dateCreated;
+    }
 }

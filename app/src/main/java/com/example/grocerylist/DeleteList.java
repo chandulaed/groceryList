@@ -35,7 +35,7 @@ public class DeleteList {
     public void searchList( Context context) {
         taskCompleted=false;
         NoSnapshot=true;
-        DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid());
+        DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid()).child("Lists");
         userref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -123,7 +123,7 @@ public class DeleteList {
             FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
             DatabaseReference refflistCreate = mDatabase.getInstance().getReference();
             refflistCreate.child("List").child(listID).setValue(null);
-            refflistCreate.child("User").child(user.getUid()).child(listID).setValue(null);
+            refflistCreate.child("User").child(user.getUid()).child("Lists").child(listID).setValue(null);
         }
         catch (Exception e){
         }

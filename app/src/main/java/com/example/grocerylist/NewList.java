@@ -23,6 +23,7 @@ public class NewList {
     private boolean NoSnapshot = false;
     private String lastListName =null;
     private String newlistname;
+    FirebaseUser user;
 
     public boolean isNoSnapshot() {
         return NoSnapshot;
@@ -45,7 +46,7 @@ public class NewList {
     }
 
     public void setUserID() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         this.UserID = user.getUid();
     }
 
@@ -74,9 +75,10 @@ public class NewList {
             DatabaseReference refflistCreate = mDatabase.getInstance().getReference();
 
             refflistCreate.child("List").child(listStruct.getListID()).setValue(listStruct);
-            refflistCreate.child("User").child(UserID).child(listStruct.getListID()).setValue(listStruct);
+            refflistCreate.child("User").child(UserID).child("Lists").child(listStruct.getListID()).setValue(listStruct);
+            refflistCreate.child("User").child(UserID).child("email").setValue(user.getEmail());
             refflistCreate.child("List").child(listStruct.getListID()).setValue(listStruct);
-            refflistCreate.child("List").child(listStruct.getListID()).child("users").child("user").setValue(UserID);
+            refflistCreate.child("List").child(listStruct.getListID()).child("users").child("user").setValue(user.getEmail());
         }
         catch (Exception e){
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -87,7 +89,7 @@ public class NewList {
     public void searchLastList() {
         taskCompleted = false;
         NoSnapshot=true;
-        DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("User").child(UserID);
+        DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("User").child(UserID).child("Lists");
         userref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

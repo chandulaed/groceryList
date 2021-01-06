@@ -28,12 +28,13 @@
     android:layout_weight="1"
     android:layout_height="0dp"
     >
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cost"
+        android:text="Date-Created"
         android:textAppearance="?android:textAppearanceSmall"
-        android:id="@+id/list_cost"
+        android:id="@+id/list_create_date"
         android:padding="5dp"
         android:textAlignment="viewEnd"
         android:textColor="#23211C"

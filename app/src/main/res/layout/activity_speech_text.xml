@@ -12,5 +12,6 @@
         android:layout_height="match_parent"
         android:textSize="18sp"
         tools:layout_editor_absoluteX="311dp"
-        tools:layout_editor_absoluteY="288dp" />
+        tools:layout_editor_absoluteY="288dp"
+        android:scrollbars="vertical"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

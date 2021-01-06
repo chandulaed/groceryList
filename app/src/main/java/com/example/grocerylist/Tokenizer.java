@@ -61,7 +61,7 @@ public class Tokenizer {
 
     public  int classifier(){
         String[] create ={"create","build","conceive","constitute","construct","design","devise","discover","establish","forge","form","found","generate","initiate","invent","make","organize"," plan"," produce","set up","shape","spawn","start"};
-        String[] edit = {"edit","alter", "make different", "become different", "undergo a change","adjust"," adapt", "turn","amend", "improve"," modify", "convert", "revise", "recast", "reform", "reshape", "refashion", "redesign", "restyle", "revamp", "rework", "remake", "remodel", "remould", "redo", "reconstruct", "reorganize", "reorder", "refine", "reorient", "reorientate", "transform", "transfigure", "evolve"};
+        String[] edit = {"edit","alter","different", "change","adjust"," adapt", "turn","amend", "improve","modify", "convert", "revise", "recast", "reform", "reshape", "refashion", "redesign", "restyle", "revamp", "rework", "remake", "remodel", "remould", "redo", "reconstruct", "reorganize", "reorder", "refine", "reorient", "reorientate", "transform", "transfigure", "evolve"};
         String[] delete = {"remove", "cut", "excise", "unpublish","wipe","delete","destroy","Delete"};
         String[] add = {"attach", "put", "append", "adjoin", "join", "affix", "insert","place","push", "load", "fit","add","insert"};
 

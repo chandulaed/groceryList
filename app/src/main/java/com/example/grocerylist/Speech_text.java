@@ -38,7 +38,6 @@ public class Speech_text extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speech_text);
         SpeechTranscript = findViewById(R.id.speech_transcript);
-
         start();
 
     }
@@ -283,8 +282,9 @@ public class Speech_text extends AppCompatActivity {
 
                 case 6:{
                     SpeechTranscript.append(result.get(0)+"\n\n");
-                    if (result.get(0).equals("no")||result.get(0).equals("No")) {
+                    if (result.get(0).equals("no")||result.get(0).equals("No")||result.get(0).equals("Don't need")||result.get(0).equals("No need")||result.get(0).equals("don't need")||result.get(0).equals("no need")) {
                         Speak("Do you want to add "+newItem.getItemQty()+" of "+newItem.getItemName()+ " to "+newItem.getlistname());
+                        newItem.setItemLoc("false");
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -466,7 +466,16 @@ public class Speech_text extends AppCompatActivity {
                     }
                     else if(result.get(0).equals("")){
                         commandnotreg(13);}
-                    else {
+                    else if(result.get(0).equals("remove")||result.get(0).equals("delete")||result.get(0).equals("clear")||result.get(0).equals("Remove")||result.get(0).equals("Delete")||result.get(0).equals("Clear")){
+                        editItem.setNewvalue("false");
+                        Speak("do you need Remove The Location of the item, " + editItem.getItemName() + " in, " + editItem.getListname());
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Ask("confirm ", 14);
+                            }
+                        }, 2000);
+                    }else {
                         editItem.setNewvalue(result.get(0));
                         Speak("do you need edit Location of the item, " + editItem.getItemName() + " to, " + editItem.getNewvalue() + " in, " + editItem.getListname());
                         handler.postDelayed(new Runnable() {

@@ -68,4 +68,6 @@ dependencies {
     implementation "com.google.android.material:material:1.1.0-alpha06"
     implementation 'com.firebaseui:firebase-ui-database:6.3.0'
     implementation 'com.google.cloud:google-cloud-language:1.101.6'
+    implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
 }

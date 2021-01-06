@@ -46,7 +46,7 @@ public class DeleteItem {
         itemavailable = false;
         taskCompleted=false;
         NoSnapshot=true;
-        DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid());
+        DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUid()).child("Lists");
         userref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

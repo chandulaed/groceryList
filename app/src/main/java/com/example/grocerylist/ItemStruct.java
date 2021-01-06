@@ -49,7 +49,8 @@ public class ItemStruct {
         this.cost = cost;
     }
 
-    public String isCollected() {
+    public String getCollected() {
+
         return collected;
     }
 
