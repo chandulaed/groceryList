@@ -66,22 +66,22 @@ public class Tokenizer {
         String[] add = {"attach", "put", "append", "adjoin", "join", "affix", "insert","place","push", "load", "fit","add","insert"};
 
         for (String word: create){
-            if(this.command.equals(word)){
+            if(this.command.matches(word)){
                 return 1;
             }
         }
         for (String word: edit){
-            if(this.command.equals(word)){
+            if(this.command.matches(word)){
                 return 2;
             }
         }
         for (String word: delete){
-            if(this.command.equals(word)){
+            if(this.command.matches(word)){
                 return 3;
             }
         }
         for (String word: add){
-            if(this.command.equals(word)){
+            if(this.command.matches(word)){
                 return 4;
             }
         }

@@ -25,6 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Share" android:theme="@style/Theme.AppCompat.popup"/>
 
         <meta-data
             android:name="preloaded_fonts"

@@ -68,7 +68,7 @@ public class Speech_text extends AppCompatActivity {
                     SpeechTranscript.append(commandtokens.getCommand()+" "+commandtokens.getObject() +"\n");
                     if (commandtokens.classifier()==1) {
                         newList = new NewList();
-                        if(commandtokens.getObject().equals("")||commandtokens.getObject()==null){
+                        if(commandtokens.getObject().equals("")||commandtokens.getObject()==null||commandtokens.getObject()=="List"||commandtokens.getObject()=="list"){
                             listcreate();
                         }else{
                             newList.setNewlistname(commandtokens.getObject());
@@ -83,7 +83,7 @@ public class Speech_text extends AppCompatActivity {
                     }
                     else if (commandtokens.classifier()==4) {
                         newItem = new NewItem();
-                        if(commandtokens.getObject()==""||commandtokens.getObject()==null){
+                        if(commandtokens.getObject()==""||commandtokens.getObject()==null||commandtokens.getObject().contains("item")||commandtokens.getObject().contains("Item")){
                             Speak("What is the item you need to add");
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -98,7 +98,7 @@ public class Speech_text extends AppCompatActivity {
                         }
                     }
                     else if(commandtokens.classifier()==2){
-                        if(commandtokens.getObject()==""||commandtokens.getObject()==null){
+                        if(commandtokens.getObject()==""||commandtokens.getObject()==null||commandtokens.getObject().contains("item")||commandtokens.getObject().contains("Item")){
                             editItem = new EditItem();
                             edititem();
                         }else {
@@ -113,28 +113,21 @@ public class Speech_text extends AppCompatActivity {
                         }
                     }
                     else if(commandtokens.classifier()==3) {
-                        if(commandtokens.getObject().equals("item")){
-                            deleteItem = new DeleteItem();
-                            Speak("What is the name Item you need to delete");
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Ask("Item Name", 27);
-                                }
-                                }, 2500);
-                        }else if(commandtokens.getObject().equals("list")) {
-                            Speak("What is the name list you need to delete");
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Ask("What is the name list you need to delete", 15);
-                                }
-                                }, 2500);
+                        if(commandtokens.getObject().contains("item")||commandtokens.getObject().contains("Item")){
+                            deleteItem();
+                        }else if(commandtokens.getObject().contains("list")||commandtokens.getObject().contains("List")) {
+                            deleteList();
                         }else if(commandtokens.getObject().equals("")||commandtokens.getObject()==null){
-
+                            Speak("What you need to delete, List or Item");
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Ask("List/Item", 31);
+                                }
+                            }, 2500);
                         }
                     }
-                    else if(commandtokens.getObject().equals("close")||commandtokens.getObject().equals("cancel")){
+                    else if(commandtokens.getObject().contains("close")||commandtokens.getObject().contains("cancel")){
                         cancelProcess("Thank you, cancelling the process");
                     }
                     else{
@@ -238,7 +231,6 @@ public class Speech_text extends AppCompatActivity {
                     }
                     break;
                 }
-
                 case 4: {
                     SpeechTranscript.append(result.get(0)+"\n\n");
                     commandtokens=new Tokenizer(result.get(0));
@@ -279,7 +271,6 @@ public class Speech_text extends AppCompatActivity {
                     }
                     break;
                 }
-
                 case 6:{
                     SpeechTranscript.append(result.get(0)+"\n\n");
                     if (result.get(0).equals("no")||result.get(0).equals("No")||result.get(0).equals("Don't need")||result.get(0).equals("No need")||result.get(0).equals("don't need")||result.get(0).equals("no need")) {
@@ -318,7 +309,6 @@ public class Speech_text extends AppCompatActivity {
                     }
                     break;
                 }
-
                 case 7:{
                     SpeechTranscript.append(result.get(0) + "\n\n");
                     if(result.get(0).equals("cancel")||result.get(0).equals("close")||result.get(0).equals("no")||result.get(0).equals("No")){
@@ -358,7 +348,6 @@ public class Speech_text extends AppCompatActivity {
                     }
                     break;
                 }
-
                 case 9:{
                     SpeechTranscript.append(result.get(0) + "\n\n");
                     if(result.get(0).equals("cancel")||result.get(0).equals("close")){
@@ -381,7 +370,6 @@ public class Speech_text extends AppCompatActivity {
                     break;
 
                 }
-
                 case 10:{
                     SpeechTranscript.append(result.get(0) + "\n\n");
                     if(result.get(0).equals("yes")||result.get(0).equals("sure")||result.get(0).equals("conform")){
@@ -409,7 +397,6 @@ public class Speech_text extends AppCompatActivity {
                     }
                     break;
                 }
-
                 case 11:{
                     SpeechTranscript.append(result.get(0) + "\n\n");
                     if(result.get(0).equals("cancel")||result.get(0).equals("close")){
@@ -457,7 +444,6 @@ public class Speech_text extends AppCompatActivity {
                     }
                     break;
                 }
-
                 case 13:{
                     SpeechTranscript.append(result.get(0) + "\n\n");
                     if(result.get(0).equals("cancel")||result.get(0).equals("close")){
@@ -604,7 +590,7 @@ public class Speech_text extends AppCompatActivity {
                     }
                     break;
                 }
-                case 17:{  //new code---------------------------------------------------------
+                case 17:{
                     SpeechTranscript.append(result.get(0) + "\n\n");
                     if(result.get(0).equals("yes")||result.get(0).equals("sure")||result.get(0).equals("confirm")){
                        listcreate(newList.getNewlistname());
@@ -1042,9 +1028,43 @@ public class Speech_text extends AppCompatActivity {
                     }
                     break;
                 }
+                case 31:{
+                    SpeechTranscript.append(result.get(0) + "\n\n");
+                    if(result.get(0).contains("List")||result.get(0).contains("list")){
+                        deleteList();
+                    }else if(result.get(0).contains("Item")||result.get(0).contains("item")) {
+                        deleteItem();
+                    }else if(result.get(0).contains("close")||result.get(0).contains("cancel")){
+                        cancelProcess("cancelling delete process, Thank you");
+                    }else{
+                        commandnotreg(31);
+                    }
+                    break;
+                }
             }
         }
     }
+    private void deleteItem(){
+        deleteItem = new DeleteItem();
+        Speak("What is the name Item you need to delete");
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Ask("Item Name", 27);
+            }
+        }, 2500);
+    }
+    private void deleteList(){
+        Speak("What is the name list you need to delete");
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Ask("What is the name list you need to delete", 15);
+            }
+        }, 2500);
+
+    }
+
 
     private void cancelProcess(String speak){
         Speak(speak);
