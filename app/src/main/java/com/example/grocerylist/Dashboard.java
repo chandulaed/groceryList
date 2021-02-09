@@ -54,6 +54,14 @@ public class Dashboard extends AppCompatActivity {
             getSupportActionBar().setTitle("HELLO " + signInAccount.getGivenName());
             mail.setText("UserID -- " + signInAccount.getEmail());
         }
+
+        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference refflistCreate = mDatabase.getInstance().getReference();
+        refflistCreate.child("User").child(user.getUid());
+        refflistCreate.child("User").child(user.getUid()).child("email").setValue(user.getEmail());
+
+
+
         voiceRecognition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

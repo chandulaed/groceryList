@@ -49,7 +49,7 @@ public class Share extends Activity {
             @Override
             public void onClick(View v) {
                 if(email.getText()!=null){
-                    searchList(email.getText().toString());
+                    searchUser(email.getText().toString());
 
                     new java.util.Timer().schedule(
                             new java.util.TimerTask(){
@@ -57,7 +57,7 @@ public class Share extends Activity {
                                 public  void run() {
                                     if(taskCompleted){
                                         if(!NoSnapshot){
-                                            if(itemavailable){
+                                            if(useravailable){
                                                 message.setText("User Available");
                                                 message.setTextColor(Color.GREEN);
                                             }else{
@@ -78,17 +78,57 @@ public class Share extends Activity {
             }
         });
 
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                taskCompleted=false;
 
+                if(useravailable==true){
+                    isuseralreadyexsit(email.getText().toString(),listID);
+                    new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    if (!userAlreadyAvaiable) {
+                                        findlist(uid, listID);
+                                        new java.util.Timer().schedule(
+                                                new java.util.TimerTask() {
+                                                    @Override
+                                                    public void run() {
+                                                        sharelist(copylist,email.getText().toString(),uid);
+                                                        new java.util.Timer().schedule(
+                                                                new java.util.TimerTask() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        if(taskCompleted){
+                                                                            message.setText("List Successfully shared");
+                                                                            message.setTextColor(Color.GREEN);
+                                                                        }else{
+                                                                            message.setText("Error list cannot be shared");
+                                                                            message.setTextColor(Color.RED);
+                                                                        }
+                                                                    }},3000);
+                                                    }},3000);
+                                    } else {
+                                        message.setText("User is already have the list");
+                                        message.setTextColor(Color.RED);
+                                    }
+                                }
+                            },3000);
 
-
+                }
+            }
+        });
     }
-    boolean itemavailable = false;
+
+
+    boolean useravailable = false;
     boolean taskCompleted=false;
     boolean NoSnapshot=true;
     String uid;
 
-    private void searchList(String email){
-        itemavailable = false;
+    private void searchUser(String email){
+        useravailable = false;
         taskCompleted=false;
         NoSnapshot=true;
         DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("User");
@@ -101,10 +141,10 @@ public class Share extends Activity {
                     userref.removeEventListener(this);
                     return;
                 }else {
-                    int i=0;
+
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         if (snapshot1.child("email").getValue().equals(email)) {
-                           itemavailable=true;
+                           useravailable=true;
                            uid= snapshot1.getKey();
                            Toast.makeText(Share.this, uid, Toast.LENGTH_SHORT).show();
                            userref.removeEventListener(this);
@@ -122,5 +162,81 @@ public class Share extends Activity {
             }
         });
         return;
+    }
+
+    boolean listavaiable=false;
+    ListStruct copylist = new ListStruct();
+
+    private void findlist(String uid,String listID) {
+        DatabaseReference listref = FirebaseDatabase.getInstance().getReference().child("List").child(listID);
+        listavaiable=false;
+        listref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.exists()){
+                    listavaiable=false;
+                    listref.removeEventListener(this);
+                    return;
+                }else {
+                         copylist.setDateCreated(snapshot.child("dateCreated").getValue().toString());
+                         copylist.setListID(snapshot.child("listID").getValue().toString());
+                         copylist.setListName(snapshot.child("listName").getValue().toString());
+                         listavaiable=true;
+                    Toast.makeText(Share.this, copylist.getListID(), Toast.LENGTH_SHORT).show();
+                    }
+                listref.removeEventListener(this);
+                taskCompleted=true;
+                return;
+                }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    boolean userAlreadyAvaiable;
+
+    private void isuseralreadyexsit(String email, String listID){
+        userAlreadyAvaiable=false;
+        taskCompleted=false;
+        NoSnapshot=true;
+        DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("users");
+        userref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.exists()){
+                    taskCompleted=true;
+                    NoSnapshot=true;
+                    userref.removeEventListener(this);
+                    return;
+                }else {
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        if (snapshot1.getValue().equals(email)) {
+                            userAlreadyAvaiable=true;
+                            Toast.makeText(Share.this, snapshot1.getValue().toString(), Toast.LENGTH_SHORT).show();
+                            userref.removeEventListener(this);
+                        }
+                    }
+                    Toast.makeText(Share.this, "Users Successfully analysed", Toast.LENGTH_SHORT).show();
+                    userref.removeEventListener(this);
+                    NoSnapshot=false;
+                    taskCompleted=true;
+                    return;
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        return;
+    }
+
+    private  void sharelist(ListStruct list,String email,String userID){
+        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference refflistCreate = mDatabase.getInstance().getReference();
+        refflistCreate.child("List").child(listID).child("users").push().setValue(email);
+        refflistCreate.child("User").child(userID).child("Lists").child(listID).setValue(list);
+        taskCompleted=true;
     }
 }

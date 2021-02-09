@@ -78,7 +78,7 @@ public class NewList {
             refflistCreate.child("User").child(UserID).child("Lists").child(listStruct.getListID()).setValue(listStruct);
             refflistCreate.child("User").child(UserID).child("email").setValue(user.getEmail());
             refflistCreate.child("List").child(listStruct.getListID()).setValue(listStruct);
-            refflistCreate.child("List").child(listStruct.getListID()).child("users").child("user").setValue(user.getEmail());
+            refflistCreate.child("List").child(listStruct.getListID()).child("users").push().setValue(user.getEmail());
         }
         catch (Exception e){
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();

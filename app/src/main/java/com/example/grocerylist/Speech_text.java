@@ -68,7 +68,7 @@ public class Speech_text extends AppCompatActivity {
                     SpeechTranscript.append(commandtokens.getCommand()+" "+commandtokens.getObject() +"\n");
                     if (commandtokens.classifier()==1) {
                         newList = new NewList();
-                        if(commandtokens.getObject().equals("")||commandtokens.getObject()==null||commandtokens.getObject()=="List"||commandtokens.getObject()=="list"){
+                        if(commandtokens.getObject().equals("")||commandtokens.getObject()==null||commandtokens.getObject().equals("List")||commandtokens.getObject().equals("list")){
                             listcreate();
                         }else{
                             newList.setNewlistname(commandtokens.getObject());
@@ -83,7 +83,7 @@ public class Speech_text extends AppCompatActivity {
                     }
                     else if (commandtokens.classifier()==4) {
                         newItem = new NewItem();
-                        if(commandtokens.getObject()==""||commandtokens.getObject()==null||commandtokens.getObject().contains("item")||commandtokens.getObject().contains("Item")){
+                        if(commandtokens.getObject()==""||commandtokens.getObject()==null||commandtokens.getObject().equals("item")||commandtokens.getObject().equals("Item")){
                             Speak("What is the item you need to add");
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -98,7 +98,7 @@ public class Speech_text extends AppCompatActivity {
                         }
                     }
                     else if(commandtokens.classifier()==2){
-                        if(commandtokens.getObject()==""||commandtokens.getObject()==null||commandtokens.getObject().contains("item")||commandtokens.getObject().contains("Item")){
+                        if(commandtokens.getObject()==""||commandtokens.getObject()==null||commandtokens.getObject().equals("item")||commandtokens.getObject().equals("Item")){
                             editItem = new EditItem();
                             edititem();
                         }else {
