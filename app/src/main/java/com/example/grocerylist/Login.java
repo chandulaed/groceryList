@@ -78,7 +78,7 @@ public class Login extends AppCompatActivity {
                 GoogleSignInAccount account =  task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
-                Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,e.getMessage()+e.toString(),Toast.LENGTH_SHORT).show();
             }
         }
     }

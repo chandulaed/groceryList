@@ -13,7 +13,7 @@ public class ItemStruct {
 
     public ItemStruct(String name) {
         this.itemName=name;
-        this.collected= "false";
+        this.collected= "False";
         this.cost="0";
     }
 

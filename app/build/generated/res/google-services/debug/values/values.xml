@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="default_web_client_id" translatable="false">1043508471634-h3vhu5bgeaqudu918ggv054ijqvom60h.apps.googleusercontent.com</string>
-    <string name="firebase_database_url" translatable="false">https://grocery-list-be059.firebaseio.com</string>
-    <string name="gcm_defaultSenderId" translatable="false">1043508471634</string>
-    <string name="google_api_key" translatable="false">AIzaSyDA66o6aJLSfgxl5wKRq-CvV3_dM2E-q9o</string>
-    <string name="google_app_id" translatable="false">1:1043508471634:android:dbe3cd14f8967a87747c8b</string>
-    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDA66o6aJLSfgxl5wKRq-CvV3_dM2E-q9o</string>
-    <string name="google_storage_bucket" translatable="false">grocery-list-be059.appspot.com</string>
-    <string name="project_id" translatable="false">grocery-list-be059</string>
+    <string name="default_web_client_id" translatable="false">815230631400-b6grmbr2jlr62jgdg86245if597jn7t3.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">815230631400</string>
+    <string name="google_api_key" translatable="false">AIzaSyB_c-lvymXVfpdHyvquy9X9JmlIaCtJqBQ</string>
+    <string name="google_app_id" translatable="false">1:815230631400:android:9ad442a5a680bc1a44385d</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyB_c-lvymXVfpdHyvquy9X9JmlIaCtJqBQ</string>
+    <string name="google_storage_bucket" translatable="false">grocerylistn.appspot.com</string>
+    <string name="project_id" translatable="false">grocerylistn</string>
 </resources>
