@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <include layout="@layout/toolbar"
+        <include layout="@layout/list_tool_bar"
             android:id="@+id/list_tool_bar">
         </include>
 
@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:textAlignment="viewStart"
-            android:textColor="#000000"
-            android:background="#23468A61"
+            android:textColor="#FFFFFF"
+            android:background="#EE032C13"
             android:textSize="30sp"/>
 
         <androidx.recyclerview.widget.RecyclerView

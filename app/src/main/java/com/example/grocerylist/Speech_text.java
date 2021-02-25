@@ -6,6 +6,9 @@ import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -36,13 +39,16 @@ public class Speech_text extends AppCompatActivity {
     private RecyclerView Srecycler;
     private RecyclerView.Adapter SAdaptor;
     private  RecyclerView.LayoutManager SLayoutManager;
-
+    androidx.appcompat.widget.Toolbar toolbar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speech_text);
+        toolbar = findViewById(R.id.voicetoolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Voice Commands");
         Srecycler=findViewById(R.id.sp_recycleView);
         Srecycler.setHasFixedSize(true);
         SLayoutManager=new LinearLayoutManager(this);
@@ -76,22 +82,11 @@ public class Speech_text extends AppCompatActivity {
                     Utrans(commandtokens.getCommand()+" "+commandtokens.getObject());
                     if (commandtokens.classifier()==1) {
                         newList = new NewList();
-                        if(commandtokens.getObject().equals("")||commandtokens.getObject()==null||commandtokens.getObject().equals("List")||commandtokens.getObject().equals("list")){
+                        if(commandtokens.getObject().equals("List")||commandtokens.getObject().equals("list")) {
+                            newList = new NewList();
                             listcreate();
-                        }else{
-                            newList.setNewlistname(commandtokens.getObject());
-                            Speak("Do you want to create a grocery list named," + newList.getNewlistname());
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Ask("confirm use grocery list", 17);
-                                }
-                            }, 4000);
-                        }
-                    }
-                    else if (commandtokens.classifier()==4) {
-                        newItem = new NewItem();
-                        if(commandtokens.getObject()==""||commandtokens.getObject()==null||commandtokens.getObject().equals("item")||commandtokens.getObject().equals("Item")){
+                        }else if(commandtokens.getObject().equals("item")||commandtokens.getObject().equals("Item")){
+                            newItem = new NewItem();
                             Speak("What is the item you need to add");
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -99,10 +94,32 @@ public class Speech_text extends AppCompatActivity {
                                     Ask("Say item name", 19);
                                 }
                             }, 2500);
+                        }else if(commandtokens.getObject().equals("")||commandtokens.getObject()==null) {
+                            Speak("What you need to add, List or Item");
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Ask("List/Item", 32);
+                                }
+                            }, 2500);
                         }
-                        else {
-                            newItem.setItemName(commandtokens.getObject());
-                            this.additemlist();
+                        else{
+                            Tokenizer tocken = new Tokenizer(commandtokens.getObject());
+                            if(tocken.getCommand().equals("List")||tocken.getCommand().equals("list")||tocken.getCommand().equals("Lists")||tocken.getCommand().equals("lists")){
+                                newList = new NewList();
+                                newList.setNewlistname(tocken.getObject());
+                                Speak("Do you want to create a grocery list named," + newList.getNewlistname());
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Ask("confirm grocery list", 17);
+                                    }
+                                }, 4000);
+                            }else if(tocken.getCommand().equals("Item")||tocken.getCommand().equals("item")||tocken.getCommand().equals("Items")||tocken.getCommand().equals("items")){
+                                newItem = new NewItem();
+                                newItem.setItemName(tocken.getObject());
+                                this.additemlist();
+                            }
                         }
                     }
                     else if(commandtokens.classifier()==2){
@@ -271,7 +288,7 @@ public class Speech_text extends AppCompatActivity {
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Ask("Place you need to buy",6);
+                                        Ask("Name of the place you need to buy",6);
                                     }
                                 },4000);
                             }
@@ -281,7 +298,7 @@ public class Speech_text extends AppCompatActivity {
                 }
                 case 6:{
                     Utrans(result.get(0));
-                    if (result.get(0).equals("no")||result.get(0).equals("No")||result.get(0).equals("Don't need")||result.get(0).equals("No need")||result.get(0).equals("don't need")||result.get(0).equals("no need")) {
+                    if (result.get(0).contains("no")||result.get(0).contains("No")||result.get(0).contains("Don't need")||result.get(0).contains("No need")||result.get(0).contains("don't need")||result.get(0).contains("no need")) {
                         Speak("Do you want to add "+newItem.getItemQty()+" of "+newItem.getItemName()+ " to "+newItem.getlistname());
                         newItem.setItemLoc("false");
                         handler.postDelayed(new Runnable() {
@@ -293,7 +310,7 @@ public class Speech_text extends AppCompatActivity {
 
                     }
                     else
-                    if (result.get(0).equals("cancel")||result.get(0).equals("close")){
+                    if (result.get(0).contains("cancel")||result.get(0).contains("close")){
                         Speak("Cancelling add item\n Thank You");
                         newList=null;
                         handler.postDelayed(new Runnable() {
@@ -460,7 +477,7 @@ public class Speech_text extends AppCompatActivity {
                     }
                     else if(result.get(0).equals("")){
                         commandnotreg(13);}
-                    else if(result.get(0).equals("remove")||result.get(0).equals("delete")||result.get(0).equals("clear")||result.get(0).equals("Remove")||result.get(0).equals("Delete")||result.get(0).equals("Clear")){
+                    else if(result.get(0).contains("remove")||result.get(0).contains("delete")||result.get(0).contains("clear")||result.get(0).contains("Remove")||result.get(0).contains("Delete")||result.get(0).contains("Clear")){
                         editItem.setNewvalue("false");
                         Speak("do you need Remove The Location of the item, " + editItem.getItemName() + " in, " + editItem.getListname());
                         handler.postDelayed(new Runnable() {
@@ -483,7 +500,7 @@ public class Speech_text extends AppCompatActivity {
                 }
                 case 14:{
                     Utrans(result.get(0));
-                    if(result.get(0).equals("yes")||result.get(0).equals("sure")||result.get(0).equals("conform")){
+                    if(result.get(0).contains("yes")||result.get(0).contains("sure")||result.get(0).contains("conform")){
                         editItem.editLoc();
                         Speak("Edit Location Successful");
                         handler.postDelayed(new Runnable() {
@@ -492,7 +509,7 @@ public class Speech_text extends AppCompatActivity {
                                 finish();
                             }
                         },4000);
-                    }else if (result.get(0).equals("no")||result.get(0).equals("cancel")){
+                    }else if (result.get(0).contains("no")||result.get(0).contains("cancel")){
                         Speak("Cancelling edit location of the item\n Thank You");
                         editItem=null;
                         handler.postDelayed(new Runnable() {
@@ -695,11 +712,11 @@ public class Speech_text extends AppCompatActivity {
                 }
                 case 21:{
                     Utrans(result.get(0));
-                    if(result.get(0).equals("cancel")||result.get(0).equals("close")){
+                    if(result.get(0).contains("cancel")||result.get(0).contains("close")){
                         editItem = null;
                         cancelProcess("Cancelling Add Item\n Thank You");
                     }
-                    else if(result.get(0).equals("name")||result.get(0).equals("Name")){
+                    else if(result.get(0).contains("name")||result.get(0).contains("Name")){
                         Speak("Please say the new Name");
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -707,7 +724,7 @@ public class Speech_text extends AppCompatActivity {
                                 Ask("Please say a name", 9);
                             }
                         }, 2000);
-                    }else if(result.get(0).equals("Quantity")||result.get(0).equals("quantity")){
+                    }else if(result.get(0).contains("Quantity")||result.get(0).contains("quantity")){
                         Speak("Please say the new Quantity");
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -715,7 +732,7 @@ public class Speech_text extends AppCompatActivity {
                                 Ask("Please say a Quantity",11 );
                             }
                         }, 2000);
-                    }else if(result.get(0).equals("Location")||result.get(0).equals("location")){
+                    }else if(result.get(0).contains("Location")||result.get(0).contains("location")){
                         Speak("Please say the new Location");
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -730,7 +747,7 @@ public class Speech_text extends AppCompatActivity {
                 }
                 case 22:{
                     Utrans(result.get(0));
-                    if(result.get(0).equals("cancel")||result.get(0).equals("close")){
+                    if(result.get(0).contains("cancel")||result.get(0).contains("close")){
                         editItem = null;
                         cancelProcess("Cancelling Edit Item\n Thank You");
                     }else if(result.get(0).equals("")||result.get(0)==null) {
@@ -749,7 +766,7 @@ public class Speech_text extends AppCompatActivity {
                 }
                 case 23:{
                     Utrans(result.get(0));
-                    if(result.get(0).equals("cancel")||result.get(0).equals("close")){
+                    if(result.get(0).contains("cancel")||result.get(0).contains("close")){
                         editItem = null;
                         cancelProcess("Cancelling Edit Item\n Thank You");
                     }else if(result.get(0).equals("")||result.get(0)==null) {
@@ -829,7 +846,7 @@ public class Speech_text extends AppCompatActivity {
                 }
                 case 24:{
                     Utrans(result.get(0));
-                    if(result.get(0).equals("cancel")||result.get(0).equals("close")){
+                    if(result.get(0).contains("cancel")||result.get(0).contains("close")){
                         editItem = null;
                         cancelProcess("Cancelling Edit Item\n Thank You");
                     }else if(result.get(0).equals("")||result.get(0)==null) {
@@ -841,7 +858,7 @@ public class Speech_text extends AppCompatActivity {
                 }
                 case 25:{
                     Utrans(result.get(0));
-                    if(result.get(0).equals("yes")||result.get(0).equals("sure")||result.get(0).equals("confirm")){
+                    if(result.get(0).contains("yes")||result.get(0).contains("sure")||result.get(0).contains("confirm")){
                         newItem =new NewItem();
                         newItem.setListID(editItem.getListID());
                         newItem.setItemName(editItem.getItemName());
@@ -852,7 +869,7 @@ public class Speech_text extends AppCompatActivity {
                                 itemQuntity();
                             }
                         },3000);
-                    }else if (result.get(0).equals("no")){
+                    }else if (result.get(0).contains("no")){
                         Speak("Please say a another list name ?");
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -861,7 +878,7 @@ public class Speech_text extends AppCompatActivity {
                             }
                         },3000);
                     }
-                    else if(result.get(0).equals("cancel")||result.get(0).equals("close")){
+                    else if(result.get(0).contains("cancel")||result.get(0).contains("close")){
                         Speak("Cancelling the add item/n Thank you ");
                         editItem=null;
                         handler.postDelayed(new Runnable() {
@@ -883,7 +900,7 @@ public class Speech_text extends AppCompatActivity {
                 }
                 case 26:{
                     Utrans(result.get(0));
-                    if(result.get(0).equals("cancel")||result.get(0).equals("close")){
+                    if(result.get(0).contains("cancel")||result.get(0).contains("close")){
                         editItem = null;
                         cancelProcess("Cancelling Delete List\n Thank You");
                     }else if(result.get(0).equals("")||result.get(0)==null) {
@@ -896,7 +913,7 @@ public class Speech_text extends AppCompatActivity {
                 case 27 :{
                     Utrans(result.get(0));
                     deleteItem.setItemName(result.get(0));
-                    if(result.get(0).equals("cancel")||result.get(0).equals("close")){
+                    if(result.get(0).contains("cancel")||result.get(0).contains("close")){
                         deleteItem= null;
                         cancelProcess("Cancelling Delete Item\n Thank You");
                     }else if(result.get(0).equals("")||result.get(0)==null) {
@@ -914,7 +931,7 @@ public class Speech_text extends AppCompatActivity {
                 }
                 case 28:{
                     Utrans(result.get(0));
-                    if(result.get(0).equals("cancel")||result.get(0).equals("close")){
+                    if(result.get(0).contains("cancel")||result.get(0).contains("close")){
                         deleteItem = null;
                         cancelProcess("Cancelling Delete Item\n Thank You");
                     }else if(result.get(0).equals("")||result.get(0)==null) {
@@ -999,7 +1016,7 @@ public class Speech_text extends AppCompatActivity {
                 }
                 case 29:{
                     Utrans(result.get(0) );
-                    if(result.get(0).equals("cancel")||result.get(0).equals("close")){
+                    if(result.get(0).contains("cancel")||result.get(0).contains("close")){
                         deleteItem = null;
                         cancelProcess("Cancelling delete Item\n Thank You");
                     }else if(result.get(0).equals("")||result.get(0)==null) {
@@ -1011,7 +1028,7 @@ public class Speech_text extends AppCompatActivity {
                 }
                 case 30:{
                     Utrans(result.get(0));
-                    if(result.get(0).equals("yes")||result.get(0).equals("sure")||result.get(0).equals("confirm")){
+                    if(result.get(0).contains("yes")||result.get(0).contains("sure")||result.get(0).contains("confirm")){
                         deleteItem.Itemdelete(getApplicationContext());
                         Speak("Item Successfully deleted ");
                         handler.postDelayed(new Runnable() {
@@ -1020,7 +1037,7 @@ public class Speech_text extends AppCompatActivity {
                                 finish();
                             }
                         },4000);
-                    }else if (result.get(0).equals("no")||result.get(0).equals("cancel")||result.get(0).equals("close")){
+                    }else if (result.get(0).contains("no")||result.get(0).contains("cancel")||result.get(0).contains("close")){
                         Speak("Cancelling the delete item/n Thank you ");
                         deleteItem=null;
                         handler.postDelayed(new Runnable() {
@@ -1045,6 +1062,28 @@ public class Speech_text extends AppCompatActivity {
                         cancelProcess("cancelling delete process, Thank you");
                     }else{
                         commandnotreg(31);
+                    }
+                    break;
+                }
+                case 32:{
+                    Utrans(result.get(0));
+                    if(result.get(0).contains("List")||result.get(0).contains("list")) {
+                        newList = new NewList();
+                        listcreate();
+                    }else if(result.get(0).contains("item")||result.get(0).contains("Item")){
+                        newItem = new NewItem();
+                        Speak("What is the item you need to add");
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Ask("Name of the item", 19);
+                            }
+                        }, 2500);
+                }else if(result.get(0).contains("close")||result.get(0).contains("cancel")){
+                        cancelProcess("Thank you, cancelling the process");
+                    }
+                    else{
+                        commandnotreg(1);
                     }
                     break;
                 }
@@ -1080,22 +1119,11 @@ public class Speech_text extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 finish();
             }
         }, 2500);
     }
 
-    private void noname(){
-        Speak("Sorry No Name found!, Please Try again");
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Ask("try again", 1);
-
-            }
-        }, 2500);
-    }
 
     private void commandnotreg(int commandno){
         Speak("Cannot recognize the command, try again");
@@ -1429,6 +1457,25 @@ public class Speech_text extends AppCompatActivity {
         LSpeeshts.add(Speeshts);
         SAdaptor.notifyDataSetChanged();
         Srecycler.smoothScrollToPosition(SAdaptor.getItemCount());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.voicemenue, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.exit: {
+                this.finish();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

@@ -30,10 +30,9 @@ public class Tokenizer {
 
 
     public  int classifier(){
-        String[] create ={"create","build","conceive","constitute","construct","design","devise","discover","establish","forge","form","found","generate","initiate","invent","make","organize"," plan"," produce","set up","shape","spawn","start"};
+        String[] create ={"attach", "put", "append", "adjoin", "join", "affix", "insert","place","push", "load", "fit","add","insert","create","build","conceive","constitute","construct","design","devise","discover","establish","forge","form","found","generate","initiate","invent","make","organize"," plan"," produce","set up","shape","spawn","start"};
         String[] edit = {"edit","alter","different", "change","adjust"," adapt", "turn","amend", "improve","modify", "convert", "revise", "recast", "reform", "reshape", "refashion", "redesign", "restyle", "revamp", "rework", "remake", "remodel", "remould", "redo", "reconstruct", "reorganize", "reorder", "refine", "reorient", "reorientate", "transform", "transfigure", "evolve"};
         String[] delete = {"remove", "cut", "excise", "unpublish","wipe","delete","destroy","Delete"};
-        String[] add = {"attach", "put", "append", "adjoin", "join", "affix", "insert","place","push", "load", "fit","add","insert"};
 
         for (String word: create){
             if(this.command.matches(word)){
@@ -48,11 +47,6 @@ public class Tokenizer {
         for (String word: delete){
             if(this.command.matches(word)){
                 return 3;
-            }
-        }
-        for (String word: add){
-            if(this.command.matches(word)){
-                return 4;
             }
         }
         return 0;

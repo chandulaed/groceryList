@@ -5,7 +5,7 @@ public class ItemStruct {
     private String itemQty;
     private String itemLocation;
     private String cost;
-    private String collected;
+    public String collected;
 
 
     public ItemStruct() {

@@ -64,6 +64,7 @@ public class ItemViewAdaptor extends RecyclerView.Adapter<ItemViewAdaptor.ItemVi
 
 
     public ItemViewAdaptor(ArrayList<ItemStruct> listItems){
+
         Itemlist =listItems;
     }
 

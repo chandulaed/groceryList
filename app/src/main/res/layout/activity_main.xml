@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_200"
+    android:background="#26064C"
     android:textAlignment="center"
     tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="340dp"
+        android:layout_height="340dp"
         android:layout_marginTop="100dp"
-        android:src="@drawable/splach_screen_icon"
+        android:src="@drawable/list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +26,7 @@
         android:lineSpacingExtra="12sp"
         android:text="Smart List "
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="#3D0447"
+        android:textColor="#FFFFFF"
         android:textSize="50sp"
         android:textStyle="bold"
         android:typeface="sans"
