@@ -100,6 +100,9 @@ public class NewItem {
 
     }
 
+    public boolean isNoSnapshot() {
+        return NoSnapshot;
+    }
 
     public String getItemName() {
         return itemStruct.getItemName();
@@ -134,6 +137,8 @@ public class NewItem {
     }
 
     public void additem(Context context){
+        itemStruct.setCost("0");
+        itemStruct.setCollected("False");
         try {
             FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
             DatabaseReference reffitemCreate = mDatabase.getInstance().getReference().child("List").child(listID).child("Items");

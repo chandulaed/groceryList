@@ -119,7 +119,6 @@ public class EditItem {
                 }else {
                     ListStruct templist;
                     listarray.clear();
-
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         templist = snapshot1.getValue(ListStruct.class);
                         if (templist.getListName().equals(getListname())) {
@@ -197,6 +196,13 @@ public class EditItem {
     public void editQty(){
         DatabaseReference editnameref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("Items").child(itemkey);
         editnameref.child("itemQty").setValue(newvalue);
+    }
+
+    public void editall(String name,String location, String quantity){
+        DatabaseReference editnameref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("Items").child(itemkey);
+        editnameref.child("itemName").setValue(name);
+        editnameref.child("itemLocation").setValue(location);
+        editnameref.child("itemQty").setValue(quantity);
     }
 
     public String getItemkey() {

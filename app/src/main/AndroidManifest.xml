@@ -13,7 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Grocerylist">
-        <activity android:name=".Grocerylist"></activity>
+        <activity android:name=".MaddItem"></activity>
+        <activity android:name=".MeditItem" />
+        <activity android:name=".MCreatList" />
+        <activity android:name=".Grocerylist" />
         <activity android:name=".Speech_text" />
         <activity android:name=".Dashboard" />
         <activity android:name=".Register" />
@@ -25,7 +28,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Share" android:theme="@style/Theme.AppCompat.popup"/>
+        <activity
+            android:name=".Share"
+            android:theme="@style/Theme.AppCompat.popup" />
 
         <meta-data
             android:name="preloaded_fonts"

@@ -8,9 +8,9 @@
     </item>
 
     <item
-        android:id="@+id/logout"
+        android:id="@+id/action_manula_add_item"
         app:showAsAction="ifRoom"
-        android:title="ADD/EDIT/DELET"
+        android:title="ADD Item"
         >
     </item>
 </menu>

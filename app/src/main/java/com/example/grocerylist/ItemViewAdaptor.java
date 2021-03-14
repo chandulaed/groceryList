@@ -1,5 +1,6 @@
 package com.example.grocerylist;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +17,23 @@ public class ItemViewAdaptor extends RecyclerView.Adapter<ItemViewAdaptor.ItemVi
 
     private ArrayList<ItemStruct> Itemlist;
     private OnItemClickListner cListner;
+
+    private OnItemLongClickListner LclickListener;
+
     public interface OnItemClickListner{
         void onCheckClick(int position);
     }
 
+    public interface OnItemLongClickListner{
+        void onLCheckClick(int position);
+    }
+
     public void setOnItemClickListner(OnItemClickListner listner){
         cListner=listner;
+    }
+
+    public void setOnItemLongClickListner(OnItemLongClickListner llistner){
+        LclickListener=llistner;
     }
 
     public static class ItemViewViewHolder extends RecyclerView.ViewHolder{
@@ -30,7 +42,8 @@ public class ItemViewAdaptor extends RecyclerView.Adapter<ItemViewAdaptor.ItemVi
         public TextView ItemLocation;
         public TextView ItemQty;
         public CheckBox ItemCollect;
-        public ItemViewViewHolder(@NonNull View itemView,OnItemClickListner listener) {
+
+        public ItemViewViewHolder(@NonNull View itemView,OnItemClickListner listener, OnItemLongClickListner lClickListner) {
             super(itemView);
             ItemName = itemView.findViewById(R.id.item_name);
             ItemCost= itemView.findViewById(R.id.item_price);
@@ -49,6 +62,20 @@ public class ItemViewAdaptor extends RecyclerView.Adapter<ItemViewAdaptor.ItemVi
                     }
                 }
             });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (lClickListner != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            lClickListner.onLCheckClick(position);
+                        }
+
+                    }
+                    return true;
+                }
+            });
         }
     }
 
@@ -58,7 +85,7 @@ public class ItemViewAdaptor extends RecyclerView.Adapter<ItemViewAdaptor.ItemVi
     @Override
     public ItemViewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item,parent,false);
-        ItemViewViewHolder IvH = new ItemViewViewHolder(v,cListner);
+        ItemViewViewHolder IvH = new ItemViewViewHolder(v,cListner,LclickListener);
         return IvH;
     }
 
@@ -82,8 +109,10 @@ public class ItemViewAdaptor extends RecyclerView.Adapter<ItemViewAdaptor.ItemVi
 
         if(currentItem.getCollected().equals("true")||currentItem.getCollected().equals("True")){
             holder.ItemCollect.setChecked(true);
+            holder.itemView.setBackgroundColor(Color.GREEN);
         }else{
             holder.ItemCollect.setChecked(false);
+            holder.itemView.setBackgroundColor(Color.WHITE);
         }
     }
 

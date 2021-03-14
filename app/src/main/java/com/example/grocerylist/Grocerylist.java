@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Grocerylist extends AppCompatActivity {
 
@@ -73,9 +73,10 @@ public class Grocerylist extends AppCompatActivity {
 
         RecyclerView();
     }
-    String itemkey;
-    String collected;
+    String itemkey=null;
+    String collected=null;
     private void RecyclerView(){
+        Collections.sort(itemlist);
         itemViewRecycler =findViewById(R.id.item_view_Recycler);
         itemViewRecycler.setHasFixedSize(true);
         itemViewLManager = new LinearLayoutManager(this);
@@ -130,6 +131,22 @@ public class Grocerylist extends AppCompatActivity {
             }
         });
 
+        itemViewAdaptor.setOnItemLongClickListner(new ItemViewAdaptor.OnItemLongClickListner(){
+            @Override
+            public void onLCheckClick(int position) {
+                String edititem = itemlist.get(position).getItemName();
+                Toast.makeText(Grocerylist.this, edititem+" list Selected", Toast.LENGTH_SHORT).show();
+                Intent e_intent = new Intent(getApplicationContext(), MeditItem.class);
+                e_intent.putExtra("List_ID",listID);
+                e_intent.putExtra("Item_Name",itemlist.get(position).getItemName());
+                e_intent.putExtra("Item_Cost",itemlist.get(position).getCost());
+                e_intent.putExtra("Item_Loc",itemlist.get(position).getItemLocation());
+                e_intent.putExtra("Item_Qty",itemlist.get(position).getItemQty());
+                e_intent.putExtra("List_Name",listName);
+                startActivity(e_intent);
+            }
+        });
+
     }
 
     @Override
@@ -146,14 +163,14 @@ public class Grocerylist extends AppCompatActivity {
                 Intent Ishare =new Intent(Grocerylist.this,Share.class);
                 Ishare.putExtra("listId",listID);
                 startActivity(Ishare);
-
                 return true;
             }
-            case R.id.logout:
+            case R.id.action_manula_add_item:
             {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(), Login.class);
-                startActivity(intent);
+                Intent Imadd = new Intent(Grocerylist.this,MaddItem.class);
+                Imadd.putExtra("listid",listID);
+                Imadd.putExtra("listName",listName);
+                startActivity(Imadd);
                 return true;
             }
 

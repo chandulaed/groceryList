@@ -14,9 +14,19 @@
         <!-- Customize your theme here. -->
 
     </style>
+
     <style name="Theme.AppCompat.popup">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
+
+    <style name="Theme.Grocerylist.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Grocerylist.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Grocerylist.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

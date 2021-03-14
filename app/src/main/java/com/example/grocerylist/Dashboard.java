@@ -1,6 +1,8 @@
 package com.example.grocerylist;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -39,6 +41,7 @@ public class Dashboard extends AppCompatActivity {
     private ListViewAdaptor listViewAdaptor;
     private RecyclerView.LayoutManager listViewLManager;
     private DatabaseReference userref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +104,11 @@ public class Dashboard extends AppCompatActivity {
             }
         });
         RecyclerView();
+
     }
+
+
+
 
     private void RecyclerView(){
         listViewRecycler =findViewById(R.id.list_view_Recycler);
@@ -122,6 +129,34 @@ public class Dashboard extends AppCompatActivity {
 
             }
         });
+
+        listViewAdaptor.setOnItemLongClickListner(new ListViewAdaptor.OnItemLongClickListner() {
+            @Override
+            public void onLCheckClick(int position) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(Dashboard.this);
+                builder.setMessage("Are you sure want to Delete the list, " + showlist.get(position).getListName() )
+                        .setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DeleteList deletelist = new DeleteList();
+                        deletelist.setListID(showlist.get(position).getListID());
+                        deletelist.listdelete();
+                        Toast.makeText(Dashboard.this, "List has been Deleted Successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alertDialog= builder.create();
+                alertDialog.show();
+            }
+        });
+
+
     }
 
 
@@ -136,6 +171,8 @@ public class Dashboard extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
+                Intent addintent = new Intent(getApplicationContext(),MCreatList.class);
+                startActivity(addintent);
                 return true;
             case R.id.logout:
             {

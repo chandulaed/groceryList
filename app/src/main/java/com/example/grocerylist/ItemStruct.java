@@ -1,6 +1,6 @@
 package com.example.grocerylist;
 
-public class ItemStruct {
+public class ItemStruct implements Comparable<ItemStruct>{
     private String itemName;
     private String itemQty;
     private String itemLocation;
@@ -56,5 +56,10 @@ public class ItemStruct {
 
     public void setCollected(String collected) {
         this.collected = collected;
+    }
+
+    @Override
+    public int compareTo(ItemStruct o) {
+        return this.getCollected().compareTo(o.getCollected());
     }
 }
