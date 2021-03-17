@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -71,7 +72,7 @@ public class Grocerylist extends AppCompatActivity {
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         itemkey.add(String.valueOf(snapshot1.getKey()));
                         templist = snapshot1.getValue(ItemStruct.class);
-                        totalcost = totalcost + Integer.parseInt(templist.getCost());
+                        totalcost = totalcost + Float.parseFloat(templist.getCost());
                         itemlist.add(templist);
                     }
                     Toast.makeText(Grocerylist.this, "List Update Completed", Toast.LENGTH_SHORT).show();
@@ -136,8 +137,8 @@ public class Grocerylist extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(Grocerylist.this);
                     builder.setTitle("Edit Cost");
 
-
                     final EditText input = new EditText(Grocerylist.this);
+                    input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     input.setText(text);
                     builder.setView(input);
 
@@ -145,9 +146,15 @@ public class Grocerylist extends AppCompatActivity {
                     builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
+                            String text = input.getText().toString().replaceAll("^0+(?!$)", "");
                             DatabaseReference costref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("Items").child(itemkey.get(position).toString());
-                                costref.child("cost").setValue(input.getText().toString());
+                            if(text.equals("")){
+                                costref.child("cost").setValue("0");
+                            }else{
+                                costref.child("cost").setValue(text);
+                            }
+
+
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
