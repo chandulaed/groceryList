@@ -1,6 +1,7 @@
 package com.example.grocerylist;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
@@ -1180,6 +1181,8 @@ public class Speech_text extends AppCompatActivity {
         }
         catch (Exception e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW,   Uri.parse("https://market.android.com/details?id=APP_PACKAGE_NAME"));
+            startActivity(browserIntent);
         }
     }
 
