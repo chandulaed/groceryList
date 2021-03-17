@@ -1,10 +1,13 @@
 package com.example.grocerylist;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,11 +30,18 @@ public class Grocerylist extends AppCompatActivity {
     private String listID,listName;
     private TextView TotalCost;
     private androidx.appcompat.widget.Toolbar toolbar;
+    private float totalcost = 0;
+    private ArrayList<String> itemkey = new ArrayList<>();
     private DatabaseReference listref;
     private ArrayList<ItemStruct> itemlist=new ArrayList<>();
     private RecyclerView itemViewRecycler;
     private ItemViewAdaptor itemViewAdaptor;
     private RecyclerView.LayoutManager itemViewLManager;
+
+    void changeCost(){
+        TotalCost.setText(String.valueOf("Rs. " + totalcost));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +49,6 @@ public class Grocerylist extends AppCompatActivity {
         listID = getIntent().getStringExtra("List_ID");
         listName = getIntent().getStringExtra("List_Name");
         TotalCost =findViewById(R.id.List_total_cost);
-        TotalCost.setText(listID);
         toolbar = findViewById(R.id.list_tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(listName);
@@ -52,17 +61,22 @@ public class Grocerylist extends AppCompatActivity {
                 if(!snapshot.exists()){
                     Toast.makeText(Grocerylist.this, "No Items available", Toast.LENGTH_SHORT).show();
                     itemlist.clear();
+                    totalcost=0;
                     itemViewAdaptor.notifyDataSetChanged();
                     return;
                 }else {
                     ItemStruct templist;
                     itemlist.clear();
+                    totalcost=0;
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        itemkey.add(String.valueOf(snapshot1.getKey()));
                         templist = snapshot1.getValue(ItemStruct.class);
+                        totalcost = totalcost + Integer.parseInt(templist.getCost());
                         itemlist.add(templist);
                     }
                     Toast.makeText(Grocerylist.this, "List Update Completed", Toast.LENGTH_SHORT).show();
                     itemViewAdaptor.notifyDataSetChanged();
+                    changeCost();
                     return;
                 }
             }
@@ -73,7 +87,7 @@ public class Grocerylist extends AppCompatActivity {
 
         RecyclerView();
     }
-    String itemkey=null;
+
     String collected=null;
     private void RecyclerView(){
         Collections.sort(itemlist);
@@ -87,49 +101,17 @@ public class Grocerylist extends AppCompatActivity {
         itemViewAdaptor.setOnItemClickListner(new ItemViewAdaptor.OnItemClickListner() {
             @Override
             public void onCheckClick(int position) {
-                String selectitem = itemlist.get(position).getItemName();
-                DatabaseReference itemref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("Items");
-                itemref.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.exists()!=true){
-                            itemref.removeEventListener(this);
-                            return;
-                        }else {
-                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                                if (snapshot1.child("itemName").getValue().equals(selectitem))  {
-                                    itemkey=String.valueOf(snapshot1.getKey());
-                                    collected=String.valueOf(snapshot1.child("collected").getValue());
-                                    Toast.makeText(Grocerylist.this, itemkey, Toast.LENGTH_SHORT).show();
-                                    itemref.removeEventListener(this);
-                                    return;
-                                }
-                            }
-                            return;
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-                });
-                new java.util.Timer().schedule(
-                        new java.util.TimerTask(){
-                            @Override
-                            public  void run() {
-                if(itemkey!=null) {
-                    DatabaseReference collectref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("Items").child(itemkey);
-                    if (collected.equals("True")) {
+                if(itemkey.size()>0) {
+                    DatabaseReference collectref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("Items").child(itemkey.get(position).toString());
+                    if (itemlist.get(position).getCollected().equals("True")) {
                         collectref.child("collected").setValue("False");
-                    } else if (collected.equals("False")) {
+                    } else if (itemlist.get(position).getCollected().equals("False")) {
                         collectref.child("collected").setValue("True");
                     }else{
-                        itemkey=null;
                         collected=null;
                     }
-                }}},3000);
-
             }
-        });
+        }});
 
         itemViewAdaptor.setOnItemLongClickListner(new ItemViewAdaptor.OnItemLongClickListner(){
             @Override
@@ -146,6 +128,45 @@ public class Grocerylist extends AppCompatActivity {
                 startActivity(e_intent);
             }
         });
+
+        itemViewAdaptor.setOnCostClickListener(new ItemViewAdaptor.OnCostClickListner() {
+            @Override
+            public void onCostClick(int position, String text) {
+                if(itemlist.get(position).getCollected().equals("True")||itemlist.get(position).getCollected().equals("true")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Grocerylist.this);
+                    builder.setTitle("Edit Cost");
+
+
+                    final EditText input = new EditText(Grocerylist.this);
+                    input.setText(text);
+                    builder.setView(input);
+
+
+                    builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            DatabaseReference costref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("Items").child(itemkey.get(position).toString());
+                                costref.child("cost").setValue(input.getText().toString());
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    builder.show();
+                }
+
+
+                else
+                    Toast.makeText(Grocerylist.this, "Please collect the item first", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
     }
 
