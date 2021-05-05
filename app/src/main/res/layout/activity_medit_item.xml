@@ -36,6 +36,7 @@
 
             <EditText
                 android:id="@+id/edit_item_name"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
@@ -44,6 +45,7 @@
 
             <EditText
                 android:id="@+id/edit_item_quantity"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginBottom="10dp"
@@ -51,6 +53,7 @@
 
             <EditText
                 android:id="@+id/edit_item_location"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginBottom="10dp"
@@ -82,13 +85,14 @@
                 android:id="@+id/edit_list_name"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="16dp"
+
                 android:fontFamily="@string/app_name"
                 android:text="test"
                 android:textAlignment="center"
                 android:textSize="40dp"
                 android:layout_marginBottom="20dp"
-                android:background="#1E2320"
+                android:background="#FFBB86FC"
+                android:backgroundTint="#FFBB86FC"
                 android:textColor="#EBEBEC"/>
 
             <TextView

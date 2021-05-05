@@ -23,14 +23,20 @@ import com.google.firebase.database.ValueEventListener;
 public class Share extends Activity {
     TextView message;
     EditText email;
-    Button share,validate;
+    Button share,validate,Cshare;
     String listID;
+    boolean useravailable = false;
+    boolean taskCompleted=false;
+    boolean NoSnapshot=true;
+    String uid;
+    boolean listavaiable=false;
+    ListStruct copylist = new ListStruct();
+    boolean userAlreadyAvaiable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.share_list);
-
         DisplayMetrics dm=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
@@ -43,11 +49,13 @@ public class Share extends Activity {
         message = findViewById(R.id.txt_message);
         share= findViewById(R.id.btn_share);
         validate=findViewById(R.id.btn_checkAvailability);
+        Cshare = findViewById(R.id.btn_cshare);
+        Cshare.setVisibility(View.GONE);
         FirebaseUser user;
-
         validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(Share.this, email.getText(), Toast.LENGTH_SHORT).show();
                 if(email.getText()!=null){
                     searchUser(email.getText().toString());
 
@@ -73,11 +81,9 @@ public class Share extends Activity {
                                         message.setTextColor(Color.RED);
                                     }
                                     }},3000);
-
                 }
             }
         });
-
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +117,7 @@ public class Share extends Activity {
                                                     }},3000);
                                     } else {
                                         message.setText("User is already have the list");
+
                                         message.setTextColor(Color.RED);
                                     }
                                 }
@@ -119,13 +126,32 @@ public class Share extends Activity {
                 }
             }
         });
+
+        Cshare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                taskCompleted=false;
+                csharelist(email.getText().toString(),uid);
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                if(taskCompleted==true){
+                                    message.setText("Cancelled the shared list");
+                                    message.setTextColor(Color.GREEN);
+                                }else{
+                                    message.setText("Sorry! List cancellation error");
+                                    message.setTextColor(Color.RED);
+                                }
+                            }},3000);
+
+
+            }
+        });
     }
 
 
-    boolean useravailable = false;
-    boolean taskCompleted=false;
-    boolean NoSnapshot=true;
-    String uid;
+
 
     private void searchUser(String email){
         useravailable = false;
@@ -141,7 +167,6 @@ public class Share extends Activity {
                     userref.removeEventListener(this);
                     return;
                 }else {
-
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         if (snapshot1.child("email").getValue().equals(email)) {
                            useravailable=true;
@@ -164,8 +189,7 @@ public class Share extends Activity {
         return;
     }
 
-    boolean listavaiable=false;
-    ListStruct copylist = new ListStruct();
+
 
     private void findlist(String uid,String listID) {
         DatabaseReference listref = FirebaseDatabase.getInstance().getReference().child("List").child(listID);
@@ -195,7 +219,7 @@ public class Share extends Activity {
         });
     }
 
-    boolean userAlreadyAvaiable;
+
 
     private void isuseralreadyexsit(String email, String listID){
         userAlreadyAvaiable=false;
@@ -214,6 +238,7 @@ public class Share extends Activity {
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         if (snapshot1.getValue().equals(email)) {
                             userAlreadyAvaiable=true;
+                            Cshare.setVisibility(View.VISIBLE);
                             Toast.makeText(Share.this, snapshot1.getValue().toString(), Toast.LENGTH_SHORT).show();
                             userref.removeEventListener(this);
                         }
@@ -239,4 +264,40 @@ public class Share extends Activity {
         refflistCreate.child("User").child(userID).child("Lists").child(listID).setValue(list);
         taskCompleted=true;
     }
+
+    private void csharelist(String email, String userID){
+        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference userref = FirebaseDatabase.getInstance().getReference().child("List").child(listID).child("users");
+        DatabaseReference refflistCreate = mDatabase.getInstance().getReference();
+        userref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.exists()){
+                    taskCompleted=true;
+                    NoSnapshot=true;
+                    userref.removeEventListener(this);
+                    return;
+                }else {
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+
+                        if (snapshot1.getValue().equals(email)) {
+                            userref.child(snapshot1.getKey()).setValue(null);
+                            refflistCreate.child("User").child(userID).child("Lists").child(listID).setValue(null);
+                            Toast.makeText(Share.this, "Users Successfully cancelled sharing", Toast.LENGTH_SHORT).show();
+                            userref.removeEventListener(this);
+                        }
+                    }
+                    refflistCreate.removeEventListener(this);
+                    userref.removeEventListener(this);
+                    NoSnapshot=false;
+                    taskCompleted=true;
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+
 }

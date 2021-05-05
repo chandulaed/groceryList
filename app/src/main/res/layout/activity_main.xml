@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#26064C"
+    android:background="#8555C1"
     android:textAlignment="center"
     tools:context=".MainActivity">
 
@@ -26,7 +26,7 @@
         android:lineSpacingExtra="12sp"
         android:text="Smart List "
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="#FFFFFF"
+        android:textColor="#FAEE84"
         android:textSize="50sp"
         android:textStyle="bold"
         android:typeface="sans"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B226064C"
+    android:background="#B29779BC"
     android:orientation="vertical"
     android:padding="20dp"
     android:textAlignment="center"
@@ -17,9 +17,10 @@
         android:src="@drawable/list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498" />
 
     <TextView
         android:id="@+id/welcometxt"
@@ -29,7 +30,8 @@
         android:text="Welcome to smart Grocery List"
         android:autoSizeTextType="uniform"
         android:lineSpacingExtra="10sp"
-        android:textColor="#FFFFFF"
+        android:textColor="#4B1085"
+        android:textSize="90sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/logoimg"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +44,7 @@
         android:layout_height="70dp"
         android:elevation="@dimen/cardview_compat_inset_shadow"
         android:text="Please Sign in to Continue"
-        android:textColor="#220239"
+        android:textColor="#FF4B1085"
         app:backgroundTint="#FFD500"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -61,7 +61,7 @@ public class Speech_text extends AppCompatActivity {
     }
 
     private void start(){
-        Speak("Hello!..What do you want ?");
+        Speak("Hello!\nWhat do you want ?");
         handler.postDelayed(new Runnable() {
             public void run() {
 
@@ -83,10 +83,10 @@ public class Speech_text extends AppCompatActivity {
                     Utrans(commandtokens.getCommand()+" "+commandtokens.getObject());
                     if (commandtokens.classifier()==1) {
                         newList = new NewList();
-                        if(commandtokens.getObject().equals("List")||commandtokens.getObject().equals("list")) {
+                        if(commandtokens.getObject().contains("List")||commandtokens.getObject().contains("list")) {
                             newList = new NewList();
                             listcreate();
-                        }else if(commandtokens.getObject().equals("item")||commandtokens.getObject().equals("Item")){
+                        }else if(commandtokens.getObject().contains("item")||commandtokens.getObject().contains("Item")){
                             newItem = new NewItem();
                             Speak("What is the item you need to add");
                             handler.postDelayed(new Runnable() {
@@ -106,7 +106,7 @@ public class Speech_text extends AppCompatActivity {
                         }
                         else{
                             Tokenizer tocken = new Tokenizer(commandtokens.getObject());
-                            if(tocken.getCommand().equals("List")||tocken.getCommand().equals("list")||tocken.getCommand().equals("Lists")||tocken.getCommand().equals("lists")){
+                            if(tocken.getCommand().contains("List")||tocken.getCommand().contains("list")||tocken.getCommand().contains("Lists")||tocken.getCommand().contains("lists")){
                                 newList = new NewList();
                                 newList.setNewlistname(tocken.getObject());
                                 Speak("Do you want to create a grocery list named," + newList.getNewlistname());
@@ -116,7 +116,7 @@ public class Speech_text extends AppCompatActivity {
                                         Ask("confirm grocery list", 17);
                                     }
                                 }, 4000);
-                            }else if(tocken.getCommand().equals("Item")||tocken.getCommand().equals("item")||tocken.getCommand().equals("Items")||tocken.getCommand().equals("items")){
+                            }else if(tocken.getCommand().contains("Item")||tocken.getCommand().contains("item")||tocken.getCommand().contains("Items")||tocken.getCommand().contains("items")){
                                 newItem = new NewItem();
                                 newItem.setItemName(tocken.getObject());
                                 this.additemlist();
@@ -124,7 +124,7 @@ public class Speech_text extends AppCompatActivity {
                         }
                     }
                     else if(commandtokens.classifier()==2){
-                        if(commandtokens.getObject()==""||commandtokens.getObject()==null||commandtokens.getObject().equals("item")||commandtokens.getObject().equals("Item")){
+                        if(commandtokens.getObject()==""||commandtokens.getObject()==null||commandtokens.getObject().contains("item")||commandtokens.getObject().contains("Item")){
                             editItem = new EditItem();
                             edititem();
                         }else {
@@ -215,7 +215,7 @@ public class Speech_text extends AppCompatActivity {
                                 public void run() {
                                     if(newItem.isTaskCompleted()){
                                         if(newItem.isItemavailable()){
-                                            Speak("Item already available, "+newItem.getCurrentItemQuantity()+" of "+ newItem.getCurrentItemName());
+                                            Speak("Item already available, "+newItem.getCurrentItemQuantity()+" of "+ newItem.getCurrentItemName()+ "\n Do you want to Edit ?");
                                             handler.postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -1203,11 +1203,11 @@ public class Speech_text extends AppCompatActivity {
                 if (newList.isTaskCompleted() == true) {
                     if (newList.getlastListName() != null) {
                         newList.setNewlistname(newList.getlastListName() + " new");
-                        Speak("your last list name is," + newList.getlastListName() + "\n\ndo you want to use," + newList.getNewlistname() + "as your new list name ?");
+                        Speak("your last list name is " + newList.getlastListName() + "\nDo you want to use " + newList.getNewlistname() + " as your new list name ?");
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                Ask("confirm use grocery list", 18);
+                                Ask("Confirm use grocery list", 18);
                             }
                             }, 6000);
                     }else{
@@ -1240,22 +1240,22 @@ public class Speech_text extends AppCompatActivity {
     }
 
     private void addItemSetlist(String text){
-        if(text.equals("1")||text.equals("one")||text.equals("One")||text.equals("first")||text.equals("First")){
+        if(text.contains("1")||text.contains("one")||text.contains("One")||text.contains("first")||text.contains("First")){
             newItem.setListID(newItem.getlistarray().get(0).getKey());
         }else
-        if(text.equals("2")||text.equals("two")||text.equals("Two")||text.equals("second")||text.equals("Second")){
+        if(text.contains("2")||text.contains("two")||text.contains("Two")||text.contains("second")||text.contains("Second")){
             newItem.setListID(newItem.getlistarray().get(1).getKey());
         }else
-        if(text.equals("3")||text.equals("three")||text.equals("Three")||text.equals("third")||text.equals("Third")){
+        if(text.contains("3")||text.contains("three")||text.contains("Three")||text.contains("third")||text.contains("Third")){
             newItem.setListID(newItem.getlistarray().get(2).getKey());
         }else
-        if(text.equals("4")||text.equals("four")||text.equals("Four")||text.equals("forth")||text.equals("Forth")){
+        if(text.contains("4")||text.contains("four")||text.contains("Four")||text.contains("forth")||text.contains("Forth")){
             newItem.setListID(newItem.getlistarray().get(3).getKey());
         }else
-        if(text.equals("5")||text.equals("five")||text.equals("Five")||text.equals("fifth")||text.equals("Fifth")){
+        if(text.contains("5")||text.contains("five")||text.contains("Five")||text.contains("fifth")||text.contains("Fifth")){
             newItem.setListID(newItem.getlistarray().get(4).getKey());
         }else
-        if(text.equals("last")||text.equals("final")||text.equals("end")||text.equals("recent")){
+        if(text.contains("last")||text.contains("final")||text.contains("end")||text.contains("recent")){
             newItem.setListID(newItem.getlistarray().get(newItem.getlistarray().size()-1).getKey());
         }else
         {
@@ -1287,22 +1287,22 @@ public class Speech_text extends AppCompatActivity {
     }
 
     private void EditItemSetlist(String text){
-        if(text.equals("1")||text.equals("one")||text.equals("One")||text.equals("first")||text.equals("First")){
+        if(text.contains("1")||text.contains("one")||text.contains("One")||text.contains("first")||text.contains("First")){
             editItem.setListID(editItem.getListarray().get(0).getKey());
         }else
-        if(text.equals("2")||text.equals("two")||text.equals("Two")||text.equals("second")||text.equals("Second")){
+        if(text.contains("2")||text.contains("two")||text.contains("Two")||text.contains("second")||text.contains("Second")){
             editItem.setListID(editItem.getListarray().get(1).getKey());
         }else
-        if(text.equals("3")||text.equals("three")||text.equals("Three")||text.equals("third")||text.equals("Third")){
+        if(text.contains("3")||text.contains("three")||text.contains("Three")||text.contains("third")||text.contains("Third")){
             editItem.setListID(editItem.getListarray().get(2).getKey());
         }else
-        if(text.equals("4")||text.equals("four")||text.equals("Four")||text.equals("forth")||text.equals("Forth")){
+        if(text.contains("4")||text.contains("four")||text.contains("Four")||text.contains("forth")||text.contains("Forth")){
             editItem.setListID(editItem.getListarray().get(3).getKey());
         }else
-        if(text.equals("5")||text.equals("five")||text.equals("Five")||text.equals("fifth")||text.equals("Fifth")){
+        if(text.contains("5")||text.contains("five")||text.contains("Five")||text.contains("fifth")||text.contains("Fifth")){
             editItem.setListID(editItem.getListarray().get(4).getKey());
         }else
-        if(text.equals("last")||text.equals("final")||text.equals("end")||text.equals("recent")){
+        if(text.contains("last")||text.contains("final")||text.contains("end")||text.contains("recent")){
             editItem.setListID(editItem.getListarray().get(editItem.getListarray().size()-1).getKey());
         }else {
             commandnotreg(24);
@@ -1340,22 +1340,22 @@ public class Speech_text extends AppCompatActivity {
     }
 
     private void DeleteListSetlist(String text){
-        if(text.equals("1")||text.equals("one")||text.equals("One")||text.equals("first")||text.equals("First")){
+        if(text.contains("1")||text.contains("one")||text.contains("One")||text.contains("first")||text.contains("First")){
             deleteList.setListID(deleteList.getListarray().get(0).getKey());
         }else
-        if(text.equals("2")||text.equals("two")||text.equals("Two")||text.equals("second")||text.equals("Second")){
+        if(text.contains("2")||text.contains("two")||text.contains("Two")||text.contains("second")||text.contains("Second")){
             deleteList.setListID(deleteList.getListarray().get(1).getKey());
         }else
-        if(text.equals("3")||text.equals("three")||text.equals("Three")||text.equals("third")||text.equals("Third")){
+        if(text.contains("3")||text.contains("three")||text.contains("Three")||text.contains("third")||text.contains("Third")){
             deleteList.setListID(deleteList.getListarray().get(2).getKey());
         }else
-        if(text.equals("4")||text.equals("four")||text.equals("Four")||text.equals("forth")||text.equals("Forth")){
+        if(text.contains("4")||text.contains("four")||text.contains("Four")||text.contains("forth")||text.contains("Forth")){
             deleteList.setListID(deleteList.getListarray().get(3).getKey());
         }else
-        if(text.equals("5")||text.equals("five")||text.equals("Five")||text.equals("fifth")||text.equals("Fifth")){
+        if(text.contains("5")||text.contains("five")||text.contains("Five")||text.contains("fifth")||text.contains("Fifth")){
             deleteList.setListID(deleteList.getListarray().get(4).getKey());
         }else
-        if(text.equals("last")||text.equals("final")||text.equals("end")||text.equals("recent")){
+        if(text.contains("last")||text.contains("final")||text.contains("end")||text.contains("recent")){
             deleteList.setListID(deleteList.getListarray().get(deleteList.getListarray().size()-1).getKey());
         }else {
             commandnotreg(26);
@@ -1372,22 +1372,22 @@ public class Speech_text extends AppCompatActivity {
     }
 
     private void DeleteItemSetlist(String text){
-        if(text.equals("1")||text.equals("one")||text.equals("One")||text.equals("first")||text.equals("First")){
+        if(text.contains("1")||text.contains("one")||text.contains("One")||text.contains("first")||text.contains("First")){
             deleteItem.setListID(deleteItem.getListarray().get(0).getKey());
         }else
-        if(text.equals("2")||text.equals("two")||text.equals("Two")||text.equals("second")||text.equals("Second")){
+        if(text.contains("2")||text.contains("two")||text.contains("Two")||text.contains("second")||text.contains("Second")){
             deleteItem.setListID(deleteItem.getListarray().get(1).getKey());
         }else
-        if(text.equals("3")||text.equals("three")||text.equals("Three")||text.equals("third")||text.equals("Third")){
+        if(text.contains("3")||text.contains("three")||text.contains("Three")||text.contains("third")||text.contains("Third")){
             deleteItem.setListID(deleteItem.getListarray().get(2).getKey());
         }else
-        if(text.equals("4")||text.equals("four")||text.equals("Four")||text.equals("forth")||text.equals("Forth")){
+        if(text.contains("4")||text.contains("four")||text.contains("Four")||text.contains("forth")||text.contains("Forth")){
             deleteItem.setListID(deleteItem.getListarray().get(3).getKey());
         }else
-        if(text.equals("5")||text.equals("five")||text.equals("Five")||text.equals("fifth")||text.equals("Fifth")){
+        if(text.contains("5")||text.contains("five")||text.contains("Five")||text.contains("fifth")||text.contains("Fifth")){
             deleteItem.setListID(deleteItem.getListarray().get(4).getKey());
         }else
-        if(text.equals("last")||text.equals("final")||text.equals("end")||text.equals("recent")){
+        if(text.contains("last")||text.contains("final")||text.contains("end")||text.contains("recent")){
             deleteItem.setListID(deleteItem.getListarray().get(deleteItem.getListarray().size()-1).getKey());
         }else {
             commandnotreg(29);

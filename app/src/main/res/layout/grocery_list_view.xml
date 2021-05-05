@@ -6,11 +6,13 @@
     android:layout_margin="8dp"
     app:cardElevation="6dp"
     android:elevation="6dp"
+
     >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#2F000000">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,6 +36,7 @@
         android:layout_height="wrap_content"
         android:text="Date-Created"
         android:textAppearance="?android:textAppearanceSmall"
+        android:background="#80EA6D"
         android:id="@+id/list_create_date"
         android:padding="5dp"
         android:textAlignment="viewEnd"

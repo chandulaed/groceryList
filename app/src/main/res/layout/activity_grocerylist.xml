@@ -15,15 +15,24 @@
             android:id="@+id/list_tool_bar">
         </include>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/List_total_cost"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:textAlignment="viewStart"
-            android:textColor="#FFFFFF"
-            android:background="#EE032C13"
-            android:textSize="30sp"/>
+            android:layout_height="35dp"
+            android:background="#AE28E16F"
+            >
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/List_total_cost"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="3dp"
+                android:textAlignment="viewEnd"
+                android:textColor="#8F0404"
+                android:text="No Item"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/item_view_Recycler"

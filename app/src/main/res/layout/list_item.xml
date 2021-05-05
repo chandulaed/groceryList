@@ -14,7 +14,7 @@
         android:id="@+id/item_layout">
 
         <CheckBox
-            android:background="#E6FD04"
+            android:background="#DEE87C"
             android:id="@+id/item_collected"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -65,14 +65,14 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:background="#6C09E6"
+                    android:background="#CBB9E1"
                     android:inputType="number"
                     android:autofillHints="item price"
                     android:id="@+id/item_price"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-
+                    android:textAlignment="viewEnd"
                     android:textSize="20sp"
                     android:textColor="@color/white"
                     android:hint="item Price"/>

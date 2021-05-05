@@ -20,9 +20,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:textAlignment="viewStart"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:textStyle="bold"
-            android:background="#A8011007"
+            android:background="#AE28E16F"
             android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@+id/mail"
             app:layout_constraintStart_toStartOf="@+id/mail" />

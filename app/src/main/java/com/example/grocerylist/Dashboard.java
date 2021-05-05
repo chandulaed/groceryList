@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,10 +43,21 @@ public class Dashboard extends AppCompatActivity {
     private ListViewAdaptor listViewAdaptor;
     private RecyclerView.LayoutManager listViewLManager;
     private DatabaseReference userref;
+    private GoogleSignInClient mGoogleSignInClient;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashbord);
         mail = findViewById(R.id.mail);
@@ -56,15 +69,13 @@ public class Dashboard extends AppCompatActivity {
         if (signInAccount != null) {
             getSupportActionBar().setTitle("HELLO " + signInAccount.getGivenName());
             mail.setText("UserID -- " + signInAccount.getEmail());
+            FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference refflistCreate = mDatabase.getInstance().getReference();
+            refflistCreate.child("User").child(user.getUid());
+            refflistCreate.child("User").child(user.getUid()).child("email").setValue(user.getEmail());
+        }else{
+            this.finish();
         }
-
-        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference refflistCreate = mDatabase.getInstance().getReference();
-        refflistCreate.child("User").child(user.getUid());
-        refflistCreate.child("User").child(user.getUid()).child("email").setValue(user.getEmail());
-
-
-
         voiceRecognition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,6 +188,7 @@ public class Dashboard extends AppCompatActivity {
             case R.id.logout:
             {
                 FirebaseAuth.getInstance().signOut();
+                mGoogleSignInClient.signOut();
                 Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 return true;

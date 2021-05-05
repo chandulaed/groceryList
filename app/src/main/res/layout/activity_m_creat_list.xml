@@ -5,17 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MCreatList"
-    android:background="#A2B6B1">
+    android:background="#FFF7B1">
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="184dp"
-        android:autofillHints="List Name"
+        android:hint="List Name"
         app:layout_constraintBottom_toTopOf="@+id/btn_CreateList"
         android:id="@+id/mlist_name"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="#C7D1CE"
+        android:background="#56000000"
+        android:textColor="@color/black"
         app:layout_constraintVertical_bias="0.2"
         tools:layout_editor_absoluteX="0dp" />
 
@@ -25,8 +26,8 @@
         android:layout_height="50dp"
         android:layout_marginBottom="400dp"
         android:text="Create List"
-        android:backgroundTint="#083C3C"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:backgroundTint="#D1BC36"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"></Button>
 
