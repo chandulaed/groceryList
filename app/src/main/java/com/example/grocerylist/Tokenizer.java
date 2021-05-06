@@ -52,4 +52,16 @@ public class Tokenizer {
         return 0;
     }
 
+    public static boolean collective(String word){
+
+        String[] cnoun = {"assortment","basket","block","bed","bowl","box","bunch","bushel","bushel","cast","clutch","cluster","comb","cube","jam","jar","loaf","kilo","gram","kilogram","milligram","piece","piece","packet","pack","plater","punnet","sheaf","slice","shock","shoulder","pods","lot of","bottle","can","carton","cup","glass","jug","liter","milliliter","bag","bushel of","bundle of","hill of","packet of","pod of","rope of","sheaf of","troop of"};
+
+        for(String noun:cnoun){
+            if(word.contains(noun)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

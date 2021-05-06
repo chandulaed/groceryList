@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import static com.example.grocerylist.Tokenizer.collective;
+
 public class MeditItem extends AppCompatActivity {
 
     String listID,itemName,itemLoc,itemCost,itemQty,listName,NewIname,NewIloc,NewIqty;
@@ -58,29 +60,34 @@ public class MeditItem extends AppCompatActivity {
                 EditItem editItem = new EditItem(itemName);
                 editItem.setListID(listID);
                 editItem.searchitem(getApplicationContext());
-                if(!newitemName.equals("")||newitemName!=null)
-                    itemName=(newitemName.getText().toString());
-                if(!newitemQty.equals("")||newitemQty!=null)
-                    itemQty=(newitemQty.getText().toString());
-                if(!newitemLoc.equals("")||newitemLoc!=null)
-                    itemLoc=(newitemLoc.getText().toString());
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                Toast.makeText(MeditItem.this, newitemName.getText(), Toast.LENGTH_SHORT).show();
+                if(newitemName.getText().toString().trim().length()!=0)
+                    itemName = (newitemName.getText().toString().trim());
+                if(newitemQty.getText().toString().trim().length()!=0){
+                    if(collective(newitemQty.getText().toString().trim())|| newitemQty.getText().toString().trim().matches("\\d+(?:\\.\\d+)?"))
+                        itemQty=(newitemQty.getText().toString().trim());
+                }
+                if(newitemLoc.getText().toString().trim().length()!=0)
+                    itemLoc=(newitemLoc.getText().toString().trim());
+                if(collective(newitemQty.getText().toString().trim())|| newitemQty.getText().toString().trim().matches("\\d+(?:\\.\\d+)?"))
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setMessage("Are you sure want to edit " + itemName)
+                            .setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            editItem.editall(itemName, itemLoc, itemQty);
+                            Toast.makeText(MeditItem.this, "Successfully Edited ", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
 
-                builder.setMessage("Are you sure want to edit " + itemName)
-                        .setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        editItem.editall(itemName,itemLoc,itemQty);
-                        Toast.makeText(MeditItem.this, "Successfully Edited ", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
                 AlertDialog alertDialog = builder.create();
                 new java.util.Timer().schedule(
                         new java.util.TimerTask(){
@@ -99,7 +106,11 @@ public class MeditItem extends AppCompatActivity {
                 }else{
                     Toast.makeText(MeditItem.this, "Error please refresh the application", Toast.LENGTH_SHORT).show();
                 } }},3000);
+                } else{
+                    newitemQty.setError("Wrong Item Quantity Format");
                 }
+
+            }
 
             }
         );

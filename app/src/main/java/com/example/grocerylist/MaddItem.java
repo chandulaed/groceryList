@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import static com.example.grocerylist.Tokenizer.collective;
+
 public class MaddItem extends AppCompatActivity {
 
     private String listID,listName;
@@ -59,15 +61,18 @@ public class MaddItem extends AppCompatActivity {
                     }
                 });
         AlertDialog alertDialog = builder.create();
-
         additem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 newItem = new NewItem();
                 newItem.setListID(listID);
-                newItem.setItemName(itemname.getText().toString());
-                newItem.setItemQty(itemqty.getText().toString());
-                newItem.setItemLoc(itemloc.getText().toString());
+                newItem.setItemName(itemname.getText().toString().trim());
+                newItem.setItemQty(itemqty.getText().toString().trim());
+                newItem.setItemLoc(itemloc.getText().toString().trim());
+
+                if(itemname.getText().toString().trim().length()!=0){
+                    if(collective(itemqty.getText().toString().trim())|| itemqty.getText().toString().trim().matches("\\d+(?:\\.\\d+)?"))
+                    {
                 newItem.searchitem(getApplicationContext());
                 new java.util.Timer().schedule(
                         new java.util.TimerTask(){
@@ -80,11 +85,10 @@ public class MaddItem extends AppCompatActivity {
                                             alertDialog.show();
                                         }
                                     });
-
                                 }else if(newItem.isTaskCompleted()==false){
                                     Toast.makeText(MaddItem.this, "Sorry can't connect to the database", Toast.LENGTH_SHORT).show();
                                 }else{
-                                    if(!itemname.getText().toString().equals("")&&!itemqty.getText().toString().equals("")) {
+
                                         newItem.setItemName(itemname.getText().toString());
                                         newItem.setItemQty(itemqty.getText().toString());
                                         if(itemloc.getText().toString().equals(""))
@@ -94,9 +98,19 @@ public class MaddItem extends AppCompatActivity {
                                         }
                                     newItem.additem(getApplicationContext());
                                         finish();
-                                    }
+
                                 }
                             }},3000);
+
+
+                            }else{
+
+                                itemqty.setError("Wrong Quantity format ");
+                            }
+                        }else {
+                    itemname.setError("Name Cannot Be Empty");
+                }
+
             }
         });
 

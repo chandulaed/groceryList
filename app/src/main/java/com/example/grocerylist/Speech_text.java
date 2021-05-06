@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.example.grocerylist.Tokenizer.collective;
+
 public class Speech_text extends AppCompatActivity {
 
     // voice_codes { first command 1   ;
@@ -271,31 +273,34 @@ public class Speech_text extends AppCompatActivity {
                     }
                 break;
                 }
-                case 5:{
+                case 5: {
                     Utrans(result.get(0));
-                    if(result.get(0).equals("cancel")||result.get(0).equals("close")){
+                    if (result.get(0).equals("cancel") || result.get(0).equals("close")) {
                         newItem = null;
                         cancelProcess("Cancelling Add Item\n Thank You");
-                    }
-                    else if(result.get(0).equals("")) {
+                    } else if (result.get(0).equals("")) {
                         commandnotreg(5);
-                    }else {
-                        Speak("Adding.., " + result.get(0));
-                        newItem.setItemQty(result.get(0));
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Speak("the place you need to buy ?");
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Ask("Name of the place you need to buy",6);
-                                    }
-                                },4000);
-                            }
-                        },4000);
+                    } else {
+                        if (collective(result.get(0).trim()) || result.get(0).trim().matches("\\d+(?:\\.\\d+)?")) {
+                            Speak("Adding.., " + result.get(0));
+                            newItem.setItemQty(result.get(0));
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Speak("the place you need to buy ?");
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Ask("Name of the place you need to buy", 6);
+                                        }
+                                    }, 4000);
+                                }
+                            }, 4000);
+                        } else {
+                            wrongformat(5);
+                        }
+                        break;
                     }
-                    break;
                 }
                 case 6:{
                     Utrans(result.get(0));
@@ -433,13 +438,19 @@ public class Speech_text extends AppCompatActivity {
                         commandnotreg(11);}
                     else {
                         editItem.setNewvalue(result.get(0));
-                        Speak("do you need edit Quantity of the item, " + editItem.getItemName() + " to, " + editItem.getNewvalue() + " in, " + editItem.getListname());
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Ask("confirm ", 12);
-                            }
-                        }, 2000);
+                        if(collective(result.get(0).toString().trim())|| result.get(0).toString().trim().matches("\\d+(?:\\.\\d+)?")) {
+                            Speak("do you need edit Quantity of the item, " + editItem.getItemName() + " to, " + editItem.getNewvalue() + " in, " + editItem.getListname());
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Ask("confirm ", 12);
+                                }
+                            }, 2000);
+
+                        }else{
+                            wrongformat(11);
+                        }
+
                     }
                     break;
                 }
@@ -1480,5 +1491,17 @@ public class Speech_text extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    private void wrongformat(int cnum){
+        Speak("Sorry Quantity Format Error ! Try again  ");
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Ask("Say of Item Quantity", cnum);
+            }
+        },2000);
+    }
+
 
 }

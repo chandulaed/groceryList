@@ -28,8 +28,8 @@ public class MCreatList extends AppCompatActivity {
         createList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String SlistName=listName.getText().toString();
-                if(SlistName.equals("")||SlistName==null){
+                String SlistName=listName.getText().toString().trim();
+                if(SlistName.length()!=0){
                     Toast.makeText(MCreatList.this, "List Name Cannot be empty", Toast.LENGTH_SHORT).show();
                 }else{
                     NewList newList = new NewList();
